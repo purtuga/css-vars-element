@@ -24,6 +24,9 @@ export class ThemePicker extends ComponentElement {
     /*  ---------------------------------- *\
         COLORS
     \*  ---------------------------------- */
+    /*
+        All colors are normally defined starting with the lightest one
+    */
     
     /* == PRIMARY COLORS == */
     --theme-color-0: rgb(255,255,255);
@@ -43,7 +46,6 @@ export class ThemePicker extends ComponentElement {
     --theme-color-accent-info-2: #39a5dc;
     --theme-color-accent-info-3: #0088ce;
     --theme-color-accent-info-4: #00659c;
-    --theme-color-accent-info-5: #004368;
     
 
     /* == SECONDARY COLOR: success (usually in the green color) == */
@@ -52,25 +54,32 @@ export class ThemePicker extends ComponentElement {
     --theme-color-accent-success-2: #6ec664;
     --theme-color-accent-success-3: #3f9c35;
     --theme-color-accent-success-4: #2d7623;
-    --theme-color-accent-success-5: #1e4f18;
 
 
+    /* == SECONDARY COLOR: alert (usually in the Yellow color) == */
+    /*    https://coolors.co/fcf6e3-f9e4a4-f9d463-f9c62c-dda600     */
+    --theme-color-accent-alert-0: #fcf6e3;
+    --theme-color-accent-alert-1: #f9e4a4;
+    --theme-color-accent-alert-2: #f9d463;
+    --theme-color-accent-alert-3: #f9c62c;
+    --theme-color-accent-alert-4: #dda600;
+    
     /* == SECONDARY COLOR: warning (usually in the orange color) == */
-    --theme-color-accent-warning-0: #fbdebf;
-    --theme-color-accent-warning-1: #f7bd7f;
-    --theme-color-accent-warning-2: #f39d3c;
-    --theme-color-accent-warning-3: #ec7a08;
-    --theme-color-accent-warning-4: #b35c00;
-    --theme-color-accent-warning-5: #773d00;
+    /*    https://coolors.co/ffe2af-ffc57a-ffa86b-ff8330-f4581f     */
+    --theme-color-accent-warning-0: #ffe2af;
+    --theme-color-accent-warning-1: #ffc57a;
+    --theme-color-accent-warning-2: #ffa86b;
+    --theme-color-accent-warning-3: #ff8330;
+    --theme-color-accent-warning-4: #f4581f;
     
     
     /* == SECONDARY COLOR: error (usually in the error color) == */
-    --theme-color-accent-error-0: #FFC4C4;
-    --theme-color-accent-error-1: #FFA8A8;
-    --theme-color-accent-error-2: #FF6060;
-    --theme-color-accent-error-3: #FF4747;
-    --theme-color-accent-error-4: #A80000;
-    --theme-color-accent-error-5: #2E0000;
+    /*    https://coolors.co/f9caca-ff7a7a-ff4b4b-ff171a-bd1818  */
+    --theme-color-accent-error-0: #F9CACA;
+    --theme-color-accent-error-1: #FF7A7A;
+    --theme-color-accent-error-2: #FF4B4B;
+    --theme-color-accent-error-3: #FF171A;
+    --theme-color-accent-error-4: #BD1818;
 
 
     /* == BACKGROUND / FORGROUND == */
@@ -82,16 +91,19 @@ export class ThemePicker extends ComponentElement {
     
     /* == MESSAGES == */
     --theme-color-msg-success-bg: var(--theme-color-accent-success-0);
-    --theme-color-msg-success-fg: var(--theme-color-accent-success-5);
+    --theme-color-msg-success-fg: var(--theme-color-accent-success-4);
 
+    --theme-color-msg-alert-bg: var(--theme-color-accent-alert-0);
+    --theme-color-msg-alert-fg: var(--theme-color-accent-alert-4);
+    
     --theme-color-msg-warning-bg: var(--theme-color-accent-warning-0);
-    --theme-color-msg-warning-fg: var(--theme-color-accent-warning-5);
+    --theme-color-msg-warning-fg: var(--theme-color-accent-warning-4);
 
     --theme-color-msg-info-bg: var(--theme-color-accent-info-0);
-    --theme-color-msg-info-fg: var(--theme-color-accent-info-5);
+    --theme-color-msg-info-fg: var(--theme-color-accent-info-4);
 
     --theme-color-msg-error-bg: var(--theme-color-accent-error-0);
-    --theme-color-msg-error-fg: var(--theme-color-accent-error-5);
+    --theme-color-msg-error-fg: var(--theme-color-accent-error-4);
 
     /*  ---------------------------------- *\
         FONTS
@@ -154,26 +166,21 @@ export class ThemePicker extends ComponentElement {
      * @returns {Array}
      */
     getCssVars() {
-        return getListOfAllCssVars();
+        if (CSS_VARS) {
+            return CSS_VARS.slice(0);
+        }
 
-    }
-}
+        CSS_VARS = [];
 
-function getListOfAllCssVars () {
-    if (CSS_VARS) {
+        const findCssVars = /(--.*):/g;
+        let matchArr;
+
+        while ((matchArr = findCssVars.exec(ThemePicker.template)) !== null) {
+            CSS_VARS.push(matchArr[1].trim());
+        }
+
         return CSS_VARS.slice(0);
     }
-
-    CSS_VARS = [];
-
-    const findCssVars = /(--.*):/g;
-    let matchArr;
-
-    while ((matchArr = findCssVars.exec(ThemePicker.template)) !== null) {
-        CSS_VARS.push(matchArr[1].trim());
-    }
-
-    return getListOfAllCssVars();
 }
 
 export default ThemePicker;

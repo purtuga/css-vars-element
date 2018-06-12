@@ -61,6 +61,20 @@ showcase({name: "pallet", group: GROUP_NAME}, function ($content) {
 
     // Colors - accent: warning ----------------------------------------------
     $div = document.createElement("div");
+    $div.innerHTML = `<h3>Secondary: Accent - Alert</h3>`;
+    isMatch = /-color-accent-alert-\d+/
+    allThemCssVars.forEach(cssVarName => {
+        if (isMatch.test(cssVarName)) {
+            const $p = document.createElement("p");
+            $p.innerHTML = getColorHtml(cssVarName);
+            $div.appendChild($p);
+        }
+    });
+    $themePicker.appendChild($div);
+    $div = null;
+
+    // Colors - accent: warning ----------------------------------------------
+    $div = document.createElement("div");
     $div.innerHTML = `<h3>Secondary: Accent - Warning</h3>`;
     isMatch = /-color-accent-warning-\d+/
     allThemCssVars.forEach(cssVarName => {
@@ -100,7 +114,7 @@ showcase({name: "pallet", group: GROUP_NAME}, function ($content) {
 <p>${getColorHtml("--theme-color-link")}</p>
 <hr>
 <p style="background:var(--theme-color-bg);color:var(--theme-color-fg)">Lerem ipsum</p>
-<p><a href="javascript:voic(0);" style="color:var(--theme-color-link)">Lorem ipsum</a></p>
+<p><a href="javascript:void(0);" style="color:var(--theme-color-link)">Lorem ipsum</a></p>
 `;
     $themePicker.appendChild($div);
     $div = null;
@@ -113,7 +127,25 @@ showcase({name: "pallet", group: GROUP_NAME}, function ($content) {
 <p>${getColorHtml("--theme-color-msg-success-bg")}</p>
 <p>${getColorHtml("--theme-color-msg-success-fg")}</p>
 <p style="padding: 0.5em;background:var(--theme-color-msg-success-bg);color:var(--theme-color-msg-success-fg)">Lerem ipsum</p>
-<hr>
+`;
+    $themePicker.appendChild($div);
+    $div = null;
+
+
+
+    $div = document.createElement("div");
+    $div.innerHTML = `
+<h3>Alert</h3>
+<p>${getColorHtml("--theme-color-msg-alert-bg")}</p>
+<p>${getColorHtml("--theme-color-msg-alert-fg")}</p>
+<p style="padding: 0.5em;background:var(--theme-color-msg-alert-bg);color:var(--theme-color-msg-alert-fg)">Lerem ipsum</p>
+`;
+    $themePicker.appendChild($div);
+    $div = null;
+
+
+    $div = document.createElement("div");
+    $div.innerHTML = `
 <h3>Warning</h3>
 <p>${getColorHtml("--theme-color-msg-warning-bg")}</p>
 <p>${getColorHtml("--theme-color-msg-warning-fg")}</p>
@@ -122,6 +154,7 @@ showcase({name: "pallet", group: GROUP_NAME}, function ($content) {
     $themePicker.appendChild($div);
     $div = null;
 
+
     // MESSAGE: INFO + ERROR ------------------------------------------------------
     $div = document.createElement("div");
     $div.innerHTML = `
@@ -129,7 +162,12 @@ showcase({name: "pallet", group: GROUP_NAME}, function ($content) {
 <p>${getColorHtml("--theme-color-msg-info-bg")}</p>
 <p>${getColorHtml("--theme-color-msg-info-fg")}</p>
 <p style="padding: 0.5em;background:var(--theme-color-msg-info-bg);color:var(--theme-color-msg-info-fg)">Lerem ipsum</p>
-<hr>
+`;
+    $themePicker.appendChild($div);
+    $div = null;
+
+    $div = document.createElement("div");
+    $div.innerHTML = `
 <h3>Error</h3>
 <p>${getColorHtml("--theme-color-msg-error-bg")}</p>
 <p>${getColorHtml("--theme-color-msg-error-fg")}</p>
