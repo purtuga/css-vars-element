@@ -1,10 +1,12 @@
-import {showcase} from "project-showcase"
+import {showcase, registerElements} from "project-showcase"
 import "./colors-showcase"
 import "./events-showcase"
 
 // import other showcases now so that they register themselves.
 
 //========================================================
+registerElements();
+
 
 showcase({name: "About", order: 1}, function ($content) {
     $content.innerHTML = `
