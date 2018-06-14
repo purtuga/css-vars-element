@@ -114,6 +114,7 @@ export class ThemePicker extends ComponentElement {
     --theme-font-size-m: 14px;
     --theme-font-size-s: 12px;
     --theme-font-size-xs: 11px;
+    
     --theme-font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
     --theme-font-family-monospace: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
 
@@ -152,6 +153,7 @@ export class ThemePicker extends ComponentElement {
          *
          * @event ThemePicker#set-theme
          * @extends CustomEvent
+         * @type {CustomEvent}
          */
         this.on("set-theme", this);
     }

@@ -32,5 +32,7 @@ document.querySelector("#ui").innerHTML = `
 # TODO
 
 - [ ] Add method to add themes
-- [ ] Add ability to define theme to display via html attribute
+- [ ] Add support for listening to 'set-theme' event (should be given them name or object with vars)
+- [ ] Add ability to define theme to display via html attribute on the CE
 - [ ] Add widget that allow user to select their own theme
+- [ ] Add support for being able to set them vars on given selector or :root alias

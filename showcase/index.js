@@ -6,7 +6,7 @@ import "./events-showcase"
 
 //========================================================
 
-showcase("About", function ($content) {
+showcase({name: "About", order: 1}, function ($content) {
     $content.innerHTML = `
 <h2>theme-picker-element</h2>
 <p>Element that allows control of theming css variables</p>

@@ -3,11 +3,10 @@ import {showcase} from "project-showcase"
 // import other showcases now so that they register themselves.
 
 //========================================================
-const GROUP_NAME = "Colors";
 const getColorHtml = cssVarName => `<span style="border:1px solid lightgrey;display:inline-block;width:20px;height:20px;vertical-align:middle;background: var(${cssVarName})"></span><code>${cssVarName}</code>`;
 
 
-showcase({name: "pallet", group: GROUP_NAME}, function ($content) {
+showcase("Base Colors", function ($content) {
     const $themePicker = document.createElement("theme-picker");
     $themePicker.setAttribute("style", "display:grid; grid:auto / repeat(4, 1fr);grid-gap:2em;");
     $content.appendChild($themePicker);
@@ -103,9 +102,6 @@ showcase({name: "pallet", group: GROUP_NAME}, function ($content) {
     $div = null;
 
 
-
-
-
     // ELEMENTS colors    -----------------------------------------------------
     $div = document.createElement("div");
     $div.innerHTML = `
@@ -119,6 +115,16 @@ showcase({name: "pallet", group: GROUP_NAME}, function ($content) {
     $themePicker.appendChild($div);
     $div = null;
 
+});
+
+
+
+showcase("Colored Messages", function ($content){
+    const $themePicker = document.createElement("theme-picker");
+    $themePicker.setAttribute("style", "display:grid; grid:auto / repeat(4, 1fr);grid-gap:2em;");
+    $content.appendChild($themePicker);
+
+    let $div;
 
     // MESSAGE: SUCCESS + WARNING------------------------------------------------------
     $div = document.createElement("div");
@@ -178,5 +184,7 @@ showcase({name: "pallet", group: GROUP_NAME}, function ($content) {
 
 
 
-
 });
+
+
+
