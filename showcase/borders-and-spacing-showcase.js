@@ -17,13 +17,16 @@ showcase("Borders and Spacing", function($content) {
     width: 90%;
     box-sizing: border-box;
     margin: auto;
-    border: var(--theme-border-width) var(--theme-border-style) var(--theme-border-color);
+    border: var(--theme-border);
     border-radius: var(--theme-border-radius);
     padding: var(--theme-spacing-6);
     ">
+    <p>--theme-border</p>
+    <p>&nbsp;</p>
     <p>--theme-border-width</p>
     <p>--theme-border-style</p>
     <p>--theme-border-color</p>
+    <p>&nbsp;</p>
     <p>--theme-border-radius</p>
 </div>
 `;

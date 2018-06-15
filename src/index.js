@@ -125,6 +125,8 @@ export class ThemePicker extends ComponentElement {
     --theme-border-width: 1px;
     --theme-border-color: var(--theme-color-5);
     --theme-border-radius: 3px;
+    
+     --theme-border: var(--theme-border-width) var(--theme-border-style) var(--theme-border-color);
 
     /*  ---------------------------------- *\
         SPACING and PADDING

@@ -14,8 +14,8 @@ ThemePicker.define();
 document.querySelector("#ui").innerHTML = `
 <theme-picker>
     <div style="
-        background: var(--theme-color-dark, #000);
-        color: var(--theme-color-dark-text, #fff);
+        background: var(--theme-color-9, #000);
+        color: var(--theme-color-0, #fff);
     ">
         <p>A test paragraph</p>
     </div>
