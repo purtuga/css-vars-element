@@ -1,5 +1,5 @@
 !function(root, factory) {
-    "object" === typeof exports && "object" === typeof module ? module.exports = factory() : "function" === typeof define && define.amd ? define([], factory) : "object" === typeof exports ? exports.ThemePickerElement = factory() : root.ThemePickerElement = factory();
+    "object" === typeof exports && "object" === typeof module ? module.exports = factory() : "function" === typeof define && define.amd ? define([], factory) : "object" === typeof exports ? exports.CssVarsElement = factory() : root.CssVarsElement = factory();
 }("undefined" !== typeof self ? self : this, function() {
     /******/
     return function(modules) {
@@ -1114,8 +1114,8 @@
             value: true
         });
         /* harmony export (binding) */
-        __webpack_require__.d(__webpack_exports__, "ThemePicker", function() {
-            return ThemePicker;
+        __webpack_require__.d(__webpack_exports__, "CssVars", function() {
+            return CssVars;
         });
         /* harmony import */
         var __WEBPACK_IMPORTED_MODULE_0_component_element__ = __webpack_require__(7);
@@ -1154,27 +1154,60 @@
             });
             superClass && (Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass);
         }
-        var ThemePicker = function(_ComponentElement) {
-            _inherits(ThemePicker, _ComponentElement);
-            function ThemePicker() {
-                _classCallCheck(this, ThemePicker);
-                return _possibleConstructorReturn(this, (ThemePicker.__proto__ || Object.getPrototypeOf(ThemePicker)).apply(this, arguments));
+        //=========================================================================
+        var CSS_VARS_LIST = void 0;
+        /**
+ * An element that exposes several CSS variables that can be controlled and thus affect
+ * the inner elements. Use it for styling common widgets
+ *
+ * @listens CssVars#set-theme
+ * @emits CssVars#change
+ */
+        var CssVars = function(_ComponentElement) {
+            _inherits(CssVars, _ComponentElement);
+            function CssVars() {
+                _classCallCheck(this, CssVars);
+                return _possibleConstructorReturn(this, (CssVars.__proto__ || Object.getPrototypeOf(CssVars)).apply(this, arguments));
             }
-            _createClass(ThemePicker, null, [ {
+            _createClass(CssVars, [ {
+                key: "init",
+                value: function() {
+                    /**
+             *
+             * @event CssVars#set-theme
+             * @extends CustomEvent
+             * @type {CustomEvent}
+             */
+                    this.on("set-theme", this);
+                }
+            }, {
+                key: "handleEvent",
+                value: function(ev) {}
+            }, {
+                key: "getCssVars",
+                value: function() {
+                    if (CSS_VARS_LIST) return CSS_VARS_LIST.slice(0);
+                    CSS_VARS_LIST = [];
+                    var findCssVars = /(--.*):/g;
+                    var matchArr = void 0;
+                    for (;null !== (matchArr = findCssVars.exec(CssVars.template)); ) CSS_VARS_LIST.push(matchArr[1].trim());
+                    return CSS_VARS_LIST.slice(0);
+                }
+            } ], [ {
                 key: "tagName",
                 get: function() {
-                    return "theme-picker";
+                    return "css-vars";
                 }
             }, {
                 key: "template",
                 get: function() {
-                    return '\n<style>\n:host {\n    display: block;\n\n    /*  ---------------------------------- *        COLORS\n    *  ---------------------------------- */\n    --theme-color-dark: #212529;\n    --theme-color-dark-text: #fff;\n\n    --theme-color-medium: #adb5bd;\n    --theme-color-medium-text: #ffff;\n\n    --theme-color-light: transparent;\n    --theme-color-light-text: #000;\n\n    /* == components == */\n    --theme-color-success-bg: #28a745;\n    --theme-color-success-text: #fff;\n\n    --theme-color-warning-bg: #ffc107;\n    --theme-color-warning-text: #000;\n\n    --theme-color-info-bg: #17a2b8;\n    --theme-color-info-text: #fff;\n\n    --theme-color-error-bg: #dc3545;\n    --theme-color-error-text: #fff;\n\n    /*  ---------------------------------- *        FONTS\n    *  ---------------------------------- */\n    --theme-font-size-xxl: 28px;\n    --theme-font-size-xl: 21px;\n    --theme-font-size-l: 17px;\n    --theme-font-size-m: 14px;\n    --theme-font-size-s: 12px;\n    --theme-font-size-xs: 11px;\n    --theme-font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";\n    --theme-font-family-monospace: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;\n\n    /*  ---------------------------------- *        BORDERS\n    *  ---------------------------------- */\n    --theme-border-style: solid;\n    --theme-border-width: 1px;\n    --theme-border-color: var(--theme-color-dark-text);\n    --then-border-radius: 3px;\n\n    /*  ---------------------------------- *        SPACING and PADDING\n    *  ---------------------------------- */\n    --theme-spacing-0: 0;\n    --theme-spacing-1: 0.25rem;\n    --theme-spacing-2: 0.5rem;\n    --theme-spacing-3: 0.75rem;\n    --theme-spacing-4: 1rem;\n    --theme-spacing-5: 1.25rem;\n    --theme-spacing-6: 1.5rem;\n    --theme-spacing-7: 1.75rem;\n    --theme-spacing-8: 2rem;\n}\n</style>\n<slot></slot>';
+                    return '\n<style>\n:host {\n    display: block;\n\n    /*  ---------------------------------- *        COLORS\n    *  ---------------------------------- */\n    /*\n        All colors are normally defined starting with the lightest one\n    */\n    \n    /* == PRIMARY COLORS == */\n    --theme-color-0: rgb(255,255,255);\n    --theme-color-1: rgb(236, 236, 236);\n    --theme-color-2: rgb(220, 220, 220);\n    --theme-color-3: rgb(197, 197, 197);\n    --theme-color-4: rgb(173, 173, 173);\n    --theme-color-5: rgb(138, 138, 138);\n    --theme-color-6: rgb(101, 101, 101);\n    --theme-color-7: rgb(86, 86, 86);\n    --theme-color-8: rgb(45, 45, 45);\n    --theme-color-9: rgb(0,0,0);\n    \n    /* == SECONDARY COLOR: info (usually in the blue color) == */\n    --theme-color-accent-info-0: #def3ff;\n    --theme-color-accent-info-1: #bee1f4;\n    --theme-color-accent-info-2: #39a5dc;\n    --theme-color-accent-info-3: #0088ce;\n    --theme-color-accent-info-4: #00659c;\n    \n\n    /* == SECONDARY COLOR: success (usually in the green color) == */\n    --theme-color-accent-success-0: #cfe7cd;\n    --theme-color-accent-success-1: #9ecf99;\n    --theme-color-accent-success-2: #6ec664;\n    --theme-color-accent-success-3: #3f9c35;\n    --theme-color-accent-success-4: #2d7623;\n\n\n    /* == SECONDARY COLOR: alert (usually in the Yellow color) == */\n    /*    https://coolors.co/fcf6e3-f9e4a4-f9d463-f9c62c-dda600     */\n    --theme-color-accent-alert-0: #fcf6e3;\n    --theme-color-accent-alert-1: #f9e4a4;\n    --theme-color-accent-alert-2: #f9d463;\n    --theme-color-accent-alert-3: #f9c62c;\n    --theme-color-accent-alert-4: #dda600;\n    \n    /* == SECONDARY COLOR: warning (usually in the orange color) == */\n    /*    https://coolors.co/ffe2af-ffc57a-ffa86b-ff8330-f4581f     */\n    --theme-color-accent-warning-0: #ffe2af;\n    --theme-color-accent-warning-1: #ffc57a;\n    --theme-color-accent-warning-2: #ffa86b;\n    --theme-color-accent-warning-3: #ff8330;\n    --theme-color-accent-warning-4: #f4581f;\n    \n    \n    /* == SECONDARY COLOR: error (usually in the error color) == */\n    /*    https://coolors.co/f9caca-ff7a7a-ff4b4b-ff171a-bd1818  */\n    --theme-color-accent-error-0: #F9CACA;\n    --theme-color-accent-error-1: #FF7A7A;\n    --theme-color-accent-error-2: #FF4B4B;\n    --theme-color-accent-error-3: #FF171A;\n    --theme-color-accent-error-4: #BD1818;\n\n\n    /* == BACKGROUND / FORGROUND == */\n    --theme-color-bg: var(--theme-color-0);\n    --theme-color-fg: var(--theme-color-9);\n\n    /* == LINKS == */\n    --theme-color-link: var(--theme-color-accent-info-3);\n    \n    /* == MESSAGES == */\n    --theme-color-msg-success-bg: var(--theme-color-accent-success-0);\n    --theme-color-msg-success-fg: var(--theme-color-accent-success-4);\n\n    --theme-color-msg-alert-bg: var(--theme-color-accent-alert-0);\n    --theme-color-msg-alert-fg: var(--theme-color-accent-alert-4);\n    \n    --theme-color-msg-warning-bg: var(--theme-color-accent-warning-0);\n    --theme-color-msg-warning-fg: var(--theme-color-accent-warning-4);\n\n    --theme-color-msg-info-bg: var(--theme-color-accent-info-0);\n    --theme-color-msg-info-fg: var(--theme-color-accent-info-4);\n\n    --theme-color-msg-error-bg: var(--theme-color-accent-error-0);\n    --theme-color-msg-error-fg: var(--theme-color-accent-error-4);\n\n    /*  ---------------------------------- *        FONTS\n    *  ---------------------------------- */\n    --theme-font-size-xxl: 28px;\n    --theme-font-size-xl: 21px;\n    --theme-font-size-l: 17px;\n    --theme-font-size-m: 14px;\n    --theme-font-size-s: 12px;\n    --theme-font-size-xs: 11px;\n    \n    --theme-font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";\n    --theme-font-family-monospace: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;\n\n    /*  ---------------------------------- *        BORDERS\n    *  ---------------------------------- */\n    --theme-border-style: solid;\n    --theme-border-width: 1px;\n    --theme-border-color: var(--theme-color-5);\n    --theme-border-radius: 3px;\n    \n     --theme-border: var(--theme-border-width) var(--theme-border-style) var(--theme-border-color);\n\n    /*  ---------------------------------- *        SPACING and PADDING\n    *  ---------------------------------- */\n    --theme-spacing-0: 0;\n    --theme-spacing-1: 0.25rem;\n    --theme-spacing-2: 0.5rem;\n    --theme-spacing-3: 0.75rem;\n    --theme-spacing-4: 1rem;\n    --theme-spacing-5: 1.25rem;\n    --theme-spacing-6: 1.5rem;\n    --theme-spacing-7: 1.75rem;\n    --theme-spacing-8: 2rem;\n    \n    /*  ---------------------------------- *        AFFECTS\n    *  ---------------------------------- */\n    --theme-box-shadow: 0 8px 10px 1px rgba(0,0,0,0.14), 0 3px 14px 2px rgba(0,0,0,0.12), 0 5px 5px -3px rgba(0,0,0,0.2);\n}\n</style>\n<slot></slot>';
                 }
             } ]);
-            return ThemePicker;
+            return CssVars;
         }(__WEBPACK_IMPORTED_MODULE_0_component_element__.a);
         /* harmony default export */
-        __webpack_exports__.default = ThemePicker;
+        __webpack_exports__.default = CssVars;
     }, /* 7 */
     /***/
     function(module, __webpack_exports__, __webpack_require__) {
@@ -1584,4 +1617,4 @@
         __webpack_require__(1);
     } ]);
 });
-//# sourceMappingURL=theme-picker-element.js.map
+//# sourceMappingURL=css-vars-element.js.map

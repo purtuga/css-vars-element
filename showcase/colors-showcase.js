@@ -7,7 +7,7 @@ const getColorHtml = cssVarName => `<span style="border:1px solid lightgrey;disp
 
 
 showcase("Base Colors", function ($content) {
-    const $themePicker = document.createElement("theme-picker");
+    const $themePicker = document.createElement("css-vars");
     $themePicker.setAttribute("style", "display:grid; grid:auto / repeat(4, 1fr);grid-gap:2em;");
     $content.appendChild($themePicker);
 
@@ -120,7 +120,7 @@ showcase("Base Colors", function ($content) {
 
 
 showcase("Colored Messages", function ($content){
-    const $themePicker = document.createElement("theme-picker");
+    const $themePicker = document.createElement("css-vars");
     $themePicker.setAttribute("style", "display:grid; grid:auto / repeat(4, 1fr);grid-gap:2em;");
     $content.appendChild($themePicker);
 

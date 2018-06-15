@@ -12,7 +12,7 @@ registerElements();
 
 showcase({name: "About", order: 1}, function ($content) {
     $content.innerHTML = `
-<h2>theme-picker-element</h2>
+<h2>css-vars-element</h2>
 <p>Element that allows control of theming css variables</p>
 <p>
     <strong>License:</strong> MIT<br>

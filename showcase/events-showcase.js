@@ -7,10 +7,10 @@ const GROUP_NAME = "Events";
 
 showcase({ name: "Listen: set-theme", group: GROUP_NAME}, function ($content) {
     $content.innerHTML = `
-<theme-picker>
+<css-vars>
     <a href="javascript:void(0);">Emit</a>
     <div></div>
-</theme-picker>
+</css-vars>
 `;
     const $a = $content.querySelector("a");
     const $div = $content.querySelector("div");

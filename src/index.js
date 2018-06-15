@@ -1,18 +1,18 @@
 import {ComponentElement} from "component-element"
 
 //=========================================================================
-let CSS_VARS;
+let CSS_VARS_LIST;
 
 /**
  * An element that exposes several CSS variables that can be controlled and thus affect
  * the inner elements. Use it for styling common widgets
  *
- * @listens ThemePicker#set-theme
- * @emits ThemePicker#change
+ * @listens CssVars#set-theme
+ * @emits CssVars#change
  */
-export class ThemePicker extends ComponentElement {
+export class CssVars extends ComponentElement {
     static get tagName() {
-        return "theme-picker";
+        return "css-vars";
     }
 
     static get template() {
@@ -153,7 +153,7 @@ export class ThemePicker extends ComponentElement {
     init() {
         /**
          *
-         * @event ThemePicker#set-theme
+         * @event CssVars#set-theme
          * @extends CustomEvent
          * @type {CustomEvent}
          */
@@ -170,21 +170,21 @@ export class ThemePicker extends ComponentElement {
      * @returns {Array}
      */
     getCssVars() {
-        if (CSS_VARS) {
-            return CSS_VARS.slice(0);
+        if (CSS_VARS_LIST) {
+            return CSS_VARS_LIST.slice(0);
         }
 
-        CSS_VARS = [];
+        CSS_VARS_LIST = [];
 
         const findCssVars = /(--.*):/g;
         let matchArr;
 
-        while ((matchArr = findCssVars.exec(ThemePicker.template)) !== null) {
-            CSS_VARS.push(matchArr[1].trim());
+        while ((matchArr = findCssVars.exec(CssVars.template)) !== null) {
+            CSS_VARS_LIST.push(matchArr[1].trim());
         }
 
-        return CSS_VARS.slice(0);
+        return CSS_VARS_LIST.slice(0);
     }
 }
 
-export default ThemePicker;
+export default CssVars;

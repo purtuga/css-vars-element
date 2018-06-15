@@ -1,7 +1,7 @@
 {
-  "name": "theme-picker-element",
+  "name": "css-vars-element",
   "version": "1.0.0",
-  "description": "Element that allows control of theming css variables",
+  "description": "Element that allows control of css variables available for theming",
   "main": "src/index.js",
   "scripts": {
     "serve": "webpack-dev-server --config node_modules/project-base/configs/webpack.dev.js --progress --hot --color --entry ./my.dev/index.js",

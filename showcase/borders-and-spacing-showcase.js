@@ -2,7 +2,7 @@ import {showcase} from "project-showcase"
 
 
 showcase("Borders and Spacing", function($content) {
-    const $themePicker = document.createElement("theme-picker");
+    const $themePicker = document.createElement("css-vars");
     $themePicker.setAttribute("style", "display:grid; grid:auto / repeat(4, 1fr);grid-gap:2em;");
     $content.appendChild($themePicker);
 
