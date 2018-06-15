@@ -1,6 +1,8 @@
 import {showcase, registerElements} from "project-showcase"
 import "./colors-showcase"
 import "./events-showcase"
+import "./font-showcase"
+import "./borders-and-spacing-showcase"
 
 // import other showcases now so that they register themselves.
 
