@@ -1,6 +1,5 @@
-import {ComponentElement, STATE_SYMBOL} from "component-element"
+import {ComponentElement, prop} from "component-element"
 import {objectKeys} from "common-micro-libs/src/jsutils/runtime-aliases"
-
 import {varsDefault} from "./vars-default";
 
 //=========================================================================
@@ -33,10 +32,22 @@ export class CssVars extends ComponentElement {
 <slot></slot>`;
     }
 
+    /**
+     * The set of props that should be set to the Element.
+     * @property
+     * @type {Object}
+     */
+    @prop
+    get vars() {return {}; }
+    set vars(newVars) {
+        if ("object" !== typeof newVars) {
+            console.warn("vars prop must be an object!"); // eslint-disable-line
+            return this.vars;
+        }
+        return newVars;
+    }
+
     init() {
-        this[STATE_SYMBOL] = {
-            active: {}
-        };
         /**
          * Set a new list of CSS Vars to the element.
          * The list of CSS Variables should be in the event's `details`.
@@ -45,31 +56,27 @@ export class CssVars extends ComponentElement {
          * @type {CustomEvent}
          */
         this.on("set-vars", this);
+        this.onPropsChange(() => setStyleVarsOnElement(this, this.props.vars), "vars");
     }
 
     handleEvent(ev) {
-        if (ev.type === "set-vars") {
-
+        if (ev.type === "set-vars" && ev.detail) {
+            this.clear();
+            this.props.vars = ev.detail;
         }
     }
 
     /**
-     * clears the current set of css vars from the element
+     * clears the current set of css vars from the element that
+     * were applied outside of the default
+     * (essentially: clears out props.vars object)
      */
     clear() {
-        objectKeys(this[STATE_SYMBOL].active).forEach(cssPropName => this.style.removeProperty(cssPropName));
-        this[STATE_SYMBOL].active = {};
-    }
-
-    /**
-     * Sets the given vars on input on the current element
-     * @param vars
-     */
-    set(vars) {
-        objectKeys(vars).forEach(varName => {
-            this.style.setProperty(varName, vars[varName]);
-            this[STATE_SYMBOL].active[varName] = vars[varName];
-        });
+        const varsKeys = objectKeys(this.props.vars);
+        if (varsKeys.length) {
+            varsKeys.forEach(cssPropName => this.style.removeProperty(cssPropName));
+            this.props.vars = {};
+        }
     }
 
     /**
@@ -80,6 +87,12 @@ export class CssVars extends ComponentElement {
     getVarNames() {
         return CSS_VAR_LIST.slice(0);
     }
+}
+
+function setStyleVarsOnElement(ele, vars) {
+    objectKeys(vars).forEach(varName => {
+        ele.style.setProperty(varName, vars[varName]);
+    });
 }
 
 export default CssVars;
