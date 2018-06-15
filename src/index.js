@@ -9,8 +9,8 @@ const CSS_VAR_LIST = objectKeys(varsDefault);
  * An element that exposes several CSS variables that can be controlled and thus affect
  * the inner elements. Use it for styling common widgets
  *
- * @listens CssVars#set-theme
- * @emits CssVars#change
+ * @listens CssVars#set-vars
+ * @fires CssVars#change
  */
 export class CssVars extends ComponentElement {
     static get tagName() {
@@ -51,9 +51,12 @@ export class CssVars extends ComponentElement {
         /**
          * Set a new list of CSS Vars to the element.
          * The list of CSS Variables should be in the event's `details`.
+         *
          * @event CssVars#set-vars
          * @extends CustomEvent
          * @type {CustomEvent}
+         *
+         * @property {Object} detail
          */
         this.on("set-vars", this);
         this.onPropsChange(() => setStyleVarsOnElement(this, this.props.vars), "vars");
@@ -76,6 +79,7 @@ export class CssVars extends ComponentElement {
         if (varsKeys.length) {
             varsKeys.forEach(cssPropName => this.style.removeProperty(cssPropName));
             this.props.vars = {};
+            this.emit("change", null, {bubble: true});
         }
     }
 
@@ -90,9 +94,18 @@ export class CssVars extends ComponentElement {
 }
 
 function setStyleVarsOnElement(ele, vars) {
-    objectKeys(vars).forEach(varName => {
-        ele.style.setProperty(varName, vars[varName]);
-    });
+    const varsKeys = objectKeys(vars);
+    if (varsKeys.length) {
+        varsKeys.forEach(varName => {
+            ele.style.setProperty(varName, vars[varName]);
+        });
+
+        /**
+         * Style variables have changed
+         * @event CssVars#change
+         */
+        this.emit("change", null, {bubble: true});
+    }
 }
 
 export default CssVars;

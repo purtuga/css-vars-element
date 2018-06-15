@@ -170,27 +170,24 @@
         __webpack_require__.d(__webpack_exports__, "a", function() {
             return PRIVATE;
         });
-        /* harmony export (binding) */
-        __webpack_require__.d(__webpack_exports__, "b", function() {
-            return STATE_SYMBOL;
-        });
+        /* unused harmony export STATE_SYMBOL */
         /* harmony export (immutable) */
-        __webpack_exports__.c = elementHasAttributeForProp;
+        __webpack_exports__.b = elementHasAttributeForProp;
         /* harmony export (immutable) */
-        __webpack_exports__.d = geAttributeValueForProp;
+        __webpack_exports__.c = geAttributeValueForProp;
         /* harmony export (immutable) */
-        __webpack_exports__.j = getState;
+        __webpack_exports__.i = getState;
         /* harmony export (immutable) */
-        __webpack_exports__.h = getKebabCase;
+        __webpack_exports__.g = getKebabCase;
         /* unused harmony export getCamelCase */
         /* harmony export (immutable) */
-        __webpack_exports__.i = getPropsDefinition;
+        __webpack_exports__.h = getPropsDefinition;
         /* harmony export (immutable) */
-        __webpack_exports__.e = getComponentClassState;
+        __webpack_exports__.d = getComponentClassState;
         /* harmony export (immutable) */
-        __webpack_exports__.f = getComponentInstanceTemplate;
+        __webpack_exports__.e = getComponentInstanceTemplate;
         /* harmony export (immutable) */
-        __webpack_exports__.g = getComponentTemplate;
+        __webpack_exports__.f = getComponentTemplate;
         /* harmony import */
         var __WEBPACK_IMPORTED_MODULE_0_common_micro_libs_src_jsutils_objectExtend__ = __webpack_require__(2);
         /* harmony import */
@@ -203,7 +200,7 @@
         var __WEBPACK_IMPORTED_MODULE_4_common_micro_libs_src_jsutils_Symbol__ = __webpack_require__(14);
         //============================================================================
         var PRIVATE = __WEBPACK_IMPORTED_MODULE_1_common_micro_libs_src_jsutils_dataStore__.a.create();
-        var STATE_SYMBOL = Object(__WEBPACK_IMPORTED_MODULE_4_common_micro_libs_src_jsutils_Symbol__.a)("state");
+        Object(__WEBPACK_IMPORTED_MODULE_4_common_micro_libs_src_jsutils_Symbol__.a)("state");
         /**
  * Checks if the element has an attribute set that matches any of the aliases for a prop
  *
@@ -533,7 +530,7 @@
                 //==============================================================
                 // Reflects changed html attributes to state.props
                 value: function(name, oldValue, newValue) {
-                    var propsDef = Object(__WEBPACK_IMPORTED_MODULE_4__utils__.i)(this.constructor);
+                    var propsDef = Object(__WEBPACK_IMPORTED_MODULE_4__utils__.h)(this.constructor);
                     propsDef[name] && (name = propsDef[name].name);
                     this.props[name] = newValue;
                 }
@@ -541,7 +538,7 @@
                 key: "destroy",
                 value: function() {
                     if (__WEBPACK_IMPORTED_MODULE_4__utils__.a.has(this)) {
-                        var state = Object(__WEBPACK_IMPORTED_MODULE_4__utils__.j)(this);
+                        var state = Object(__WEBPACK_IMPORTED_MODULE_4__utils__.i)(this);
                         __WEBPACK_IMPORTED_MODULE_4__utils__.a.delete(this);
                         if (state.destroyQueued) {
                             clearTimeout(state.destroyQueued);
@@ -556,7 +553,7 @@
             }, {
                 key: "onDestroy",
                 value: function(callback) {
-                    Object(__WEBPACK_IMPORTED_MODULE_4__utils__.j)(this).destroyCallbacks.push(callback);
+                    Object(__WEBPACK_IMPORTED_MODULE_4__utils__.i)(this).destroyCallbacks.push(callback);
                 }
             }, {
                 key: "$",
@@ -615,7 +612,7 @@
                     Object(__WEBPACK_IMPORTED_MODULE_5__polyfill_support__.b)(this);
                     // Cancel destroy if it is queued
                     if (__WEBPACK_IMPORTED_MODULE_4__utils__.a.has(this)) {
-                        var state = Object(__WEBPACK_IMPORTED_MODULE_4__utils__.j)(this);
+                        var state = Object(__WEBPACK_IMPORTED_MODULE_4__utils__.i)(this);
                         if (state.destroyQueued) {
                             clearTimeout(state.destroyQueued);
                             state.destroyQueued = null;
@@ -623,7 +620,7 @@
                         state.isMounted = true;
                         state.ready && this.mounted();
                     } else {
-                        Object(__WEBPACK_IMPORTED_MODULE_4__utils__.j)(this).isMounted = true;
+                        Object(__WEBPACK_IMPORTED_MODULE_4__utils__.i)(this).isMounted = true;
                         setupComponent(this);
                     }
                 }
@@ -634,7 +631,7 @@
                     // This seems to be currently the only way to ensure attached `onDestroy` logic run when
                     // the element is no longer needed.
                     if (__WEBPACK_IMPORTED_MODULE_4__utils__.a.has(this)) {
-                        var state = Object(__WEBPACK_IMPORTED_MODULE_4__utils__.j)(this);
+                        var state = Object(__WEBPACK_IMPORTED_MODULE_4__utils__.i)(this);
                         state.destroyQueued || (state.destroyQueued = setTimeout(this.destroy.bind(this), this.constructor.delayDestroy));
                         state.isMounted = false;
                         state.ready && this.unmounted();
@@ -647,12 +644,12 @@
                     if (this.constructor.prototype === this) throw new Error("can't be used on own prototype");
                     if (this._$props) return this._$props;
                     // On first call - setup the property on the instance
-                    var propDefinitions = Object(__WEBPACK_IMPORTED_MODULE_4__utils__.i)(this.constructor);
+                    var propDefinitions = Object(__WEBPACK_IMPORTED_MODULE_4__utils__.h)(this.constructor);
                     var props = {};
                     Object(__WEBPACK_IMPORTED_MODULE_1_common_micro_libs_src_jsutils_runtime_aliases__.f)(propDefinitions).forEach(function(propName) {
                         if (!propDefinitions[propName] || !propDefinitions[propName]._isAlias) {
                             var propValue = propDefinitions[propName].default.call(_this2);
-                            propDefinitions[propName].attr && !propDefinitions[propName].boolean && Object(__WEBPACK_IMPORTED_MODULE_4__utils__.c)(_this2, propDefinitions[propName]) && (propValue = Object(__WEBPACK_IMPORTED_MODULE_4__utils__.d)(_this2, propDefinitions[propName]));
+                            propDefinitions[propName].attr && !propDefinitions[propName].boolean && Object(__WEBPACK_IMPORTED_MODULE_4__utils__.b)(_this2, propDefinitions[propName]) && (propValue = Object(__WEBPACK_IMPORTED_MODULE_4__utils__.c)(_this2, propDefinitions[propName]));
                             Object(__WEBPACK_IMPORTED_MODULE_1_common_micro_libs_src_jsutils_runtime_aliases__.e)(props, propName, {
                                 configurable: true,
                                 enumerable: true,
@@ -706,7 +703,7 @@
          */
                 value: function(eleInstance) {
                     // FIXME: should two additional params be provided - one to get templateInstance and another to get templateElement?
-                    return Object(__WEBPACK_IMPORTED_MODULE_4__utils__.f)(eleInstance);
+                    return Object(__WEBPACK_IMPORTED_MODULE_4__utils__.e)(eleInstance);
                 }
             }, {
                 key: "tagName",
@@ -741,9 +738,9 @@
             }, {
                 key: "observedAttributes",
                 get: function() {
-                    var state = Object(__WEBPACK_IMPORTED_MODULE_4__utils__.e)(this);
+                    var state = Object(__WEBPACK_IMPORTED_MODULE_4__utils__.d)(this);
                     if (!state.observedAttrs) {
-                        var propList = Object(__WEBPACK_IMPORTED_MODULE_4__utils__.i)(this);
+                        var propList = Object(__WEBPACK_IMPORTED_MODULE_4__utils__.h)(this);
                         state.observedAttrs = Object(__WEBPACK_IMPORTED_MODULE_1_common_micro_libs_src_jsutils_runtime_aliases__.f)(propList).filter(function(p) {
                             return propList[p].attr;
                         });
@@ -754,7 +751,7 @@
             return ComponentElement;
         }(HTMLElement));
         function setupComponent(component) {
-            var state = Object(__WEBPACK_IMPORTED_MODULE_4__utils__.j)(component);
+            var state = Object(__WEBPACK_IMPORTED_MODULE_4__utils__.i)(component);
             var lastReadyState = null;
             var handleReadyChanges = function() {
                 if (lastReadyState === state.ready) return;
@@ -1212,6 +1209,11 @@
         var __WEBPACK_IMPORTED_MODULE_1_common_micro_libs_src_jsutils_runtime_aliases__ = __webpack_require__(0);
         /* harmony import */
         var __WEBPACK_IMPORTED_MODULE_2__vars_default__ = __webpack_require__(18);
+        var _typeof = "function" === typeof Symbol && "symbol" === typeof Symbol.iterator ? function(obj) {
+            return typeof obj;
+        } : function(obj) {
+            return obj && "function" === typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
+        };
         var _createClass = function() {
             function defineProperties(target, props) {
                 for (var i = 0; i < props.length; i++) {
@@ -1228,6 +1230,7 @@
                 return Constructor;
             };
         }();
+        var _class;
         function _classCallCheck(instance, Constructor) {
             if (!(instance instanceof Constructor)) throw new TypeError("Cannot call a class as a function");
         }
@@ -1253,10 +1256,10 @@
  * An element that exposes several CSS variables that can be controlled and thus affect
  * the inner elements. Use it for styling common widgets
  *
- * @listens CssVars#set-theme
- * @emits CssVars#change
+ * @listens CssVars#set-vars
+ * @fires CssVars#change
  */
-        var CssVars = function(_ComponentElement) {
+        var CssVars = (_class = function(_ComponentElement) {
             _inherits(CssVars, _ComponentElement);
             function CssVars() {
                 _classCallCheck(this, CssVars);
@@ -1265,45 +1268,62 @@
             _createClass(CssVars, [ {
                 key: "init",
                 value: function() {
-                    this[__WEBPACK_IMPORTED_MODULE_0_component_element__.b] = {
-                        active: {}
-                    };
+                    var _this2 = this;
                     /**
              * Set a new list of CSS Vars to the element.
              * The list of CSS Variables should be in the event's `details`.
+             *
              * @event CssVars#set-vars
              * @extends CustomEvent
              * @type {CustomEvent}
+             *
+             * @property {Object} detail
              */
                     this.on("set-vars", this);
+                    this.onPropsChange(function() {
+                        return setStyleVarsOnElement(_this2, _this2.props.vars);
+                    }, "vars");
                 }
             }, {
                 key: "handleEvent",
                 value: function(ev) {
-                    ev.type;
+                    if ("set-vars" === ev.type && ev.detail) {
+                        this.clear();
+                        this.props.vars = ev.detail;
+                    }
                 }
             }, {
                 key: "clear",
                 value: function() {
-                    var _this2 = this;
-                    Object(__WEBPACK_IMPORTED_MODULE_1_common_micro_libs_src_jsutils_runtime_aliases__.f)(this[__WEBPACK_IMPORTED_MODULE_0_component_element__.b].active).forEach(function(cssPropName) {
-                        return _this2.style.removeProperty(cssPropName);
-                    });
-                    this[__WEBPACK_IMPORTED_MODULE_0_component_element__.b].active = {};
-                }
-            }, {
-                key: "set",
-                value: function(vars) {
                     var _this3 = this;
-                    Object(__WEBPACK_IMPORTED_MODULE_1_common_micro_libs_src_jsutils_runtime_aliases__.f)(vars).forEach(function(varName) {
-                        _this3.style.setProperty(varName, vars[varName]);
-                        _this3[__WEBPACK_IMPORTED_MODULE_0_component_element__.b].active[varName] = vars[varName];
-                    });
+                    var varsKeys = Object(__WEBPACK_IMPORTED_MODULE_1_common_micro_libs_src_jsutils_runtime_aliases__.f)(this.props.vars);
+                    if (varsKeys.length) {
+                        varsKeys.forEach(function(cssPropName) {
+                            return _this3.style.removeProperty(cssPropName);
+                        });
+                        this.props.vars = {};
+                        this.emit("change", null, {
+                            bubble: true
+                        });
+                    }
                 }
             }, {
                 key: "getVarNames",
                 value: function() {
                     return CSS_VAR_LIST.slice(0);
+                }
+            }, {
+                key: "vars",
+                get: function() {
+                    return {};
+                },
+                set: function(newVars) {
+                    if ("object" !== ("undefined" === typeof newVars ? "undefined" : _typeof(newVars))) {
+                        console.warn("vars prop must be an object!");
+                        // eslint-disable-line
+                        return this.vars;
+                    }
+                    return newVars;
                 }
             } ], [ {
                 key: "tagName",
@@ -1320,7 +1340,43 @@
                 }
             } ]);
             return CssVars;
-        }(__WEBPACK_IMPORTED_MODULE_0_component_element__.a);
+        }(__WEBPACK_IMPORTED_MODULE_0_component_element__.a), function(target, property, decorators, descriptor, context) {
+            var desc = {};
+            Object.keys(descriptor).forEach(function(key) {
+                desc[key] = descriptor[key];
+            });
+            desc.enumerable = !!desc.enumerable;
+            desc.configurable = !!desc.configurable;
+            ("value" in desc || desc.initializer) && (desc.writable = true);
+            desc = decorators.slice().reverse().reduce(function(desc, decorator) {
+                return decorator(target, property, desc) || desc;
+            }, desc);
+            if (context && void 0 !== desc.initializer) {
+                desc.value = desc.initializer ? desc.initializer.call(context) : void 0;
+                desc.initializer = void 0;
+            }
+            if (void 0 === desc.initializer) {
+                Object.defineProperty(target, property, desc);
+                desc = null;
+            }
+            return desc;
+        }(_class.prototype, "vars", [ __WEBPACK_IMPORTED_MODULE_0_component_element__.b ], Object.getOwnPropertyDescriptor(_class.prototype, "vars"), _class.prototype), 
+        _class);
+        function setStyleVarsOnElement(ele, vars) {
+            var varsKeys = Object(__WEBPACK_IMPORTED_MODULE_1_common_micro_libs_src_jsutils_runtime_aliases__.f)(vars);
+            if (varsKeys.length) {
+                varsKeys.forEach(function(varName) {
+                    ele.style.setProperty(varName, vars[varName]);
+                });
+                /**
+         * Style variables have changed
+         * @event CssVars#change
+         */
+                this.emit("change", null, {
+                    bubble: true
+                });
+            }
+        }
         /* harmony default export */
         __webpack_exports__.default = CssVars;
     }, /* 8 */
@@ -1334,20 +1390,16 @@
             return __WEBPACK_IMPORTED_MODULE_0__ComponentElement__.a;
         });
         /* harmony import */
-        __webpack_require__(16);
-        /* unused harmony namespace reexport */
+        var __WEBPACK_IMPORTED_MODULE_1__decorators_prop__ = __webpack_require__(16);
+        /* harmony namespace reexport (by used) */
+        __webpack_require__.d(__webpack_exports__, "b", function() {
+            return __WEBPACK_IMPORTED_MODULE_1__decorators_prop__.a;
+        });
         /* harmony import */
         __webpack_require__(17);
         /* unused harmony namespace reexport */
         /* harmony import */
-        var __WEBPACK_IMPORTED_MODULE_3__utils__ = __webpack_require__(1);
-        /* unused harmony reexport getState */
-        /* unused harmony reexport getComponentTemplate */
-        /* unused harmony reexport getComponentInstanceTemplate */
-        /* harmony reexport (binding) */
-        __webpack_require__.d(__webpack_exports__, "b", function() {
-            return __WEBPACK_IMPORTED_MODULE_3__utils__.b;
-        });
+        __webpack_require__(1);
     }, /* 9 */
     /***/
     function(module, __webpack_exports__, __webpack_require__) {
@@ -1709,7 +1761,7 @@
             // FIXME: need additional checks here. ONly use shady if ShadowDom is not supported natively.
             //              need to use: ShadyCSS.nativeShadow to check if shadowroot is supported
             //              Also: should we check the Component's "useShadow" property?
-            supportsShadyCSS() && __WEBPACK_IMPORTED_MODULE_0_common_micro_libs_src_jsutils_getGlobal__.a.ShadyCSS.prepareTemplate(Object(__WEBPACK_IMPORTED_MODULE_1__utils__.g)(Component), tagName);
+            supportsShadyCSS() && __WEBPACK_IMPORTED_MODULE_0_common_micro_libs_src_jsutils_getGlobal__.a.ShadyCSS.prepareTemplate(Object(__WEBPACK_IMPORTED_MODULE_1__utils__.f)(Component), tagName);
         }
         /**
  * Styles the instance of a custom element using ShadyCSS
@@ -1723,13 +1775,156 @@
     /***/
     function(module, __webpack_exports__, __webpack_require__) {
         "use strict";
-        /* unused harmony export prop */
+        /* harmony export (immutable) */
+        __webpack_exports__.a = prop;
         /* harmony import */
-        __webpack_require__(2);
+        var __WEBPACK_IMPORTED_MODULE_0_common_micro_libs_src_jsutils_objectExtend__ = __webpack_require__(2);
         /* harmony import */
-        __webpack_require__(0);
+        var __WEBPACK_IMPORTED_MODULE_1_common_micro_libs_src_jsutils_runtime_aliases__ = __webpack_require__(0);
         /* harmony import */
-        __webpack_require__(1);
+        var __WEBPACK_IMPORTED_MODULE_2__utils__ = __webpack_require__(1);
+        //===============================================================================
+        var RE_UPPER_CASE_LETTERS = /[A-Z]/;
+        var NOOP = function(val) {
+            return val;
+        };
+        /**
+ * Create a ComponentElement property.
+ *
+ * @param {Object} [options]
+ * @param {Object} [Proto]
+ * @param {String} [prop]
+ * @param {Object} [descriptor]
+ *
+ * @returns {Function}
+ */
+        function prop() {
+            for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) args[_key] = arguments[_key];
+            // Called with options? Return Design function
+            if (args.length < 2) return setupProp.bind(null, args[0]);
+            return setupProp.apply(void 0, [ null ].concat(args));
+        }
+        function setupProp(options, Proto, prop, descriptor) {
+            var getter = descriptor.get;
+            var setter = descriptor.set;
+            var propDef = void 0;
+            // If prop is defined as `boolean` then ensure that the value stored is
+            // always a boolean based upon whether the prop is on the element or not
+            // In this case, defined getter/setter is ignored/discarded
+            // TODO: is there a use case where calling the real getter/setter is valid?
+            if (options && options.boolean) {
+                options.attr = true;
+                getter = descriptor.get = function() {
+                    return Object(__WEBPACK_IMPORTED_MODULE_2__utils__.b)(this, propDef);
+                };
+                setter = descriptor.set = function(value) {
+                    // When setting the value of this attribute directly on the instance (or instance.props),
+                    // ensure that element attribute is also adjusted to reflect value.
+                    // Do this only if the `value` is boolean - because when an attribute is added to the
+                    // element, its value should be empty string.
+                    "boolean" === typeof value && (value && !Object(__WEBPACK_IMPORTED_MODULE_2__utils__.b)(this, propDef) ? this.setAttribute(prop, "") : !value && Object(__WEBPACK_IMPORTED_MODULE_2__utils__.b)(this, propDef) && this.removeAttribute(prop));
+                    return Object(__WEBPACK_IMPORTED_MODULE_2__utils__.b)(this, propDef);
+                };
+            }
+            propDef = Object(__WEBPACK_IMPORTED_MODULE_0_common_micro_libs_src_jsutils_objectExtend__.a)(getPropDef(Proto, prop, getter, setter), options);
+            descriptor.get = descriptor.set = lazyProp(prop, getter, setter);
+            // Create a instance property for each alias as well
+            propDef.aliases.length && propDef.aliases.forEach(function(propAliasName) {
+                if (!(propAliasName in Proto)) {
+                    var aliasPropGetterSetterSetup = lazyProp(propAliasName, getter, setter);
+                    Object(__WEBPACK_IMPORTED_MODULE_1_common_micro_libs_src_jsutils_runtime_aliases__.e)(Proto, propAliasName, {
+                        configurable: true,
+                        get: aliasPropGetterSetterSetup,
+                        set: aliasPropGetterSetterSetup
+                    });
+                }
+            });
+            return descriptor;
+        }
+        function getClassProps(Proto) {
+            Proto.constructor.propsDef || Object(__WEBPACK_IMPORTED_MODULE_1_common_micro_libs_src_jsutils_runtime_aliases__.e)(Proto.constructor, "propsDef", {
+                configurable: true,
+                writable: true,
+                value: {}
+            });
+            return Proto.constructor.propsDef;
+        }
+        /**
+ * Returns the PropDefinition
+ *
+ * @private
+ *
+ * @param Proto
+ * @param name
+ * @param getter
+ * @param setter
+ * @returns ComponentElement~PropDefinition
+ */
+        function getPropDef(Proto, name, getter, setter) {
+            var classProps = getClassProps(Proto);
+            if (!classProps[name]) {
+                /**
+         * A Class prop definition
+         *
+         * @typedef {Object} ComponentElement~PropDefinition
+         * @property {String} name              Then name of the prop
+         * @property {Boolean} attr             Can the prop be set via an HTML attribute
+         * @property {Boolean} required         Is the prop required
+         * @property {Boolean} boolean          Is the prop value mean to be a boolean (note: also forces `attr` to true)
+         * @property {Function} default         Function that returns default value (the `getter` when decorator is used)
+         * @property {Function} filter          Function that filters the value being set (the `setter` when decorator is used)
+         * @property {Array<String>} aliases    An array of aliases for the prop
+         */
+                classProps[name] = {
+                    name: name,
+                    attr: false,
+                    required: false,
+                    boolean: false,
+                    default: getter || NOOP,
+                    filter: setter || NOOP,
+                    aliases: [ name.toLowerCase() ]
+                };
+                // If the prop name has upper case letters, then its possible that it is
+                // defined as camelCase - create ka-bab alias.
+                RE_UPPER_CASE_LETTERS.test(name) && classProps[name].aliases.push(Object(__WEBPACK_IMPORTED_MODULE_2__utils__.g)(name));
+            }
+            return classProps[name];
+        }
+        /**
+ * Return a getter/setter function to be used in a Property descriptor. When invoked first time as
+ * part of an instance, it will setup the actually get/set function that will persist Props to the
+ * instance `instance.props`
+ *
+ * @private
+ *
+ * @param propName
+ * @param getter
+ * @param setter
+ *
+ * @returns {Function}
+ */
+        function lazyProp(propName, getter, setter) {
+            // FIXME: getter/setter not being used?
+            var $propName = "_$" + propName;
+            return function() {
+                var isUpdateMode = 1 === arguments.length;
+                if (-1 !== Object.getOwnPropertyNames(this).indexOf($propName)) return isUpdateMode ? this[$propName] = arguments[0] : this[$propName];
+                // Ensure we write back to
+                var writeToPropName = Object(__WEBPACK_IMPORTED_MODULE_2__utils__.h)(this.constructor)[propName].name;
+                Object(__WEBPACK_IMPORTED_MODULE_1_common_micro_libs_src_jsutils_runtime_aliases__.e)(this, $propName, {
+                    configurable: true,
+                    get: function() {
+                        return this.props[writeToPropName];
+                    },
+                    set: function(newValue) {
+                        return this.props[writeToPropName] = newValue;
+                    }
+                });
+                // update mode
+                if (isUpdateMode) return this[$propName] = arguments[0];
+                return this[$propName];
+            };
+        }
     }, /* 17 */
     /***/
     function(module, __webpack_exports__, __webpack_require__) {
