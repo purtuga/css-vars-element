@@ -30,14 +30,14 @@ export class ThemePicker extends ComponentElement {
     
     /* == PRIMARY COLORS == */
     --theme-color-0: rgb(255,255,255);
-    --theme-color-1: rgb(200,200,200);
-    --theme-color-2: rgb(175,175,175);
-    --theme-color-3: rgb(150,150,150);
-    --theme-color-4: rgb(125,125,125);
-    --theme-color-5: rgb(100,100,100);
-    --theme-color-6: rgb(75,75,75);
-    --theme-color-7: rgb(50,50,50);
-    --theme-color-8: rgb(25,25,25);
+    --theme-color-1: rgb(236, 236, 236);
+    --theme-color-2: rgb(220, 220, 220);
+    --theme-color-3: rgb(197, 197, 197);
+    --theme-color-4: rgb(173, 173, 173);
+    --theme-color-5: rgb(138, 138, 138);
+    --theme-color-6: rgb(101, 101, 101);
+    --theme-color-7: rgb(86, 86, 86);
+    --theme-color-8: rgb(45, 45, 45);
     --theme-color-9: rgb(0,0,0);
     
     /* == SECONDARY COLOR: info (usually in the blue color) == */
