@@ -107,7 +107,7 @@
         /******/
         // Load entry module and return exports
         /******/
-        return __webpack_require__(__webpack_require__.s = 6);
+        return __webpack_require__(__webpack_require__.s = 7);
     }([ /* 0 */
     /***/
     function(module, __webpack_exports__, __webpack_require__) {
@@ -170,29 +170,63 @@
         __webpack_require__.d(__webpack_exports__, "a", function() {
             return PRIVATE;
         });
+        /* harmony export (binding) */
+        __webpack_require__.d(__webpack_exports__, "b", function() {
+            return STATE_SYMBOL;
+        });
         /* harmony export (immutable) */
-        __webpack_exports__.g = getState;
+        __webpack_exports__.c = elementHasAttributeForProp;
         /* harmony export (immutable) */
-        __webpack_exports__.e = getKebabCase;
+        __webpack_exports__.d = geAttributeValueForProp;
+        /* harmony export (immutable) */
+        __webpack_exports__.j = getState;
+        /* harmony export (immutable) */
+        __webpack_exports__.h = getKebabCase;
         /* unused harmony export getCamelCase */
         /* harmony export (immutable) */
-        __webpack_exports__.f = getPropsDefinition;
+        __webpack_exports__.i = getPropsDefinition;
         /* harmony export (immutable) */
-        __webpack_exports__.b = getComponentClassState;
+        __webpack_exports__.e = getComponentClassState;
         /* harmony export (immutable) */
-        __webpack_exports__.c = getComponentInstanceTemplate;
+        __webpack_exports__.f = getComponentInstanceTemplate;
         /* harmony export (immutable) */
-        __webpack_exports__.d = getComponentTemplate;
+        __webpack_exports__.g = getComponentTemplate;
         /* harmony import */
         var __WEBPACK_IMPORTED_MODULE_0_common_micro_libs_src_jsutils_objectExtend__ = __webpack_require__(2);
         /* harmony import */
         var __WEBPACK_IMPORTED_MODULE_1_common_micro_libs_src_jsutils_dataStore__ = __webpack_require__(13);
         /* harmony import */
-        var __WEBPACK_IMPORTED_MODULE_2_observables_src_objectWatchProp__ = __webpack_require__(4);
+        var __WEBPACK_IMPORTED_MODULE_2_observables_src_objectWatchProp__ = __webpack_require__(5);
         /* harmony import */
         var __WEBPACK_IMPORTED_MODULE_3_common_micro_libs_src_jsutils_runtime_aliases__ = __webpack_require__(0);
+        /* harmony import */
+        var __WEBPACK_IMPORTED_MODULE_4_common_micro_libs_src_jsutils_Symbol__ = __webpack_require__(14);
         //============================================================================
         var PRIVATE = __WEBPACK_IMPORTED_MODULE_1_common_micro_libs_src_jsutils_dataStore__.a.create();
+        var STATE_SYMBOL = Object(__WEBPACK_IMPORTED_MODULE_4_common_micro_libs_src_jsutils_Symbol__.a)("state");
+        /**
+ * Checks if the element has an attribute set that matches any of the aliases for a prop
+ *
+ * @param {ComponentElement} ele
+ * @param {ComponentElement~PropDefinition} propDef
+ *
+ * @return {Boolean}
+ */
+        function elementHasAttributeForProp(ele, propDef) {
+            return propDef.aliases.some(function(propAlias) {
+                return ele.hasAttribute(propAlias);
+            });
+        }
+        function geAttributeValueForProp(ele, propDef) {
+            var attrVal = "";
+            propDef.aliases.some(function(propAlias) {
+                if (ele.hasAttribute(propAlias)) {
+                    attrVal = ele.getAttribute(propAlias);
+                    return true;
+                }
+            });
+            return attrVal;
+        }
         function getState(instance) {
             if (!PRIVATE.has(instance)) {
                 var state = {
@@ -241,6 +275,11 @@
                 return "-" + p1.toLowerCase();
             });
         }
+        /**
+ *
+ * @param ComponentClass
+ * @returns {Object<String,ComponentElement~PropDefinition>}
+ */
         function getPropsDefinition(ComponentClass) {
             var state = getComponentClassState(ComponentClass);
             if (!state.propsDef) {
@@ -351,6 +390,29 @@
     /***/
     function(module, __webpack_exports__, __webpack_require__) {
         "use strict";
+        /* WEBPACK VAR INJECTION */
+        (function(global) {
+            /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() {
+                return GLOBAL;
+            });
+            /* unused harmony export getGlobal */
+            var _typeof = "function" === typeof Symbol && "symbol" === typeof Symbol.iterator ? function(obj) {
+                return typeof obj;
+            } : function(obj) {
+                return obj && "function" === typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
+            };
+            var GLOBAL = function() {
+                /* global self, window, global */
+                if ("undefined" !== ("undefined" === typeof window ? "undefined" : _typeof(window))) return window;
+                if ("undefined" !== ("undefined" === typeof global ? "undefined" : _typeof(global))) return global;
+                if ("undefined" !== ("undefined" === typeof self ? "undefined" : _typeof(self))) return self;
+                return Function("return this;")();
+            }();
+        }).call(__webpack_exports__, __webpack_require__(10));
+    }, /* 4 */
+    /***/
+    function(module, __webpack_exports__, __webpack_require__) {
+        "use strict";
         /* harmony export (binding) */
         __webpack_require__.d(__webpack_exports__, "a", function() {
             return ComponentElement;
@@ -360,13 +422,13 @@
         /* harmony import */
         var __WEBPACK_IMPORTED_MODULE_1_common_micro_libs_src_jsutils_runtime_aliases__ = __webpack_require__(0);
         /* harmony import */
-        var __WEBPACK_IMPORTED_MODULE_2_observables_src_objectWatchProp__ = __webpack_require__(4);
+        var __WEBPACK_IMPORTED_MODULE_2_observables_src_objectWatchProp__ = __webpack_require__(5);
         /* harmony import */
         var __WEBPACK_IMPORTED_MODULE_3_common_micro_libs_src_domutils_domAddEventListener__ = __webpack_require__(12);
         /* harmony import */
         var __WEBPACK_IMPORTED_MODULE_4__utils__ = __webpack_require__(1);
         /* harmony import */
-        var __WEBPACK_IMPORTED_MODULE_5__polyfill_support__ = __webpack_require__(14);
+        var __WEBPACK_IMPORTED_MODULE_5__polyfill_support__ = __webpack_require__(15);
         var _typeof = "function" === typeof Symbol && "symbol" === typeof Symbol.iterator ? function(obj) {
             return typeof obj;
         } : function(obj) {
@@ -457,7 +519,7 @@
             /**
      * The Component's props definition
      * @name propsDef
-     * @type {Object<String,Object>}
+     * @type {Object<String,ComponentElement~PropDefinition>}
      */
             /**
      * Return default registration tag name
@@ -471,7 +533,7 @@
                 //==============================================================
                 // Reflects changed html attributes to state.props
                 value: function(name, oldValue, newValue) {
-                    var propsDef = Object(__WEBPACK_IMPORTED_MODULE_4__utils__.f)(this.constructor);
+                    var propsDef = Object(__WEBPACK_IMPORTED_MODULE_4__utils__.i)(this.constructor);
                     propsDef[name] && (name = propsDef[name].name);
                     this.props[name] = newValue;
                 }
@@ -479,7 +541,7 @@
                 key: "destroy",
                 value: function() {
                     if (__WEBPACK_IMPORTED_MODULE_4__utils__.a.has(this)) {
-                        var state = Object(__WEBPACK_IMPORTED_MODULE_4__utils__.g)(this);
+                        var state = Object(__WEBPACK_IMPORTED_MODULE_4__utils__.j)(this);
                         __WEBPACK_IMPORTED_MODULE_4__utils__.a.delete(this);
                         if (state.destroyQueued) {
                             clearTimeout(state.destroyQueued);
@@ -489,11 +551,12 @@
                             return cb();
                         });
                     }
+                    this.parentNode && this.parentNode.removeChild(this);
                 }
             }, {
                 key: "onDestroy",
                 value: function(callback) {
-                    Object(__WEBPACK_IMPORTED_MODULE_4__utils__.g)(this).destroyCallbacks.push(callback);
+                    Object(__WEBPACK_IMPORTED_MODULE_4__utils__.j)(this).destroyCallbacks.push(callback);
                 }
             }, {
                 key: "$",
@@ -552,7 +615,7 @@
                     Object(__WEBPACK_IMPORTED_MODULE_5__polyfill_support__.b)(this);
                     // Cancel destroy if it is queued
                     if (__WEBPACK_IMPORTED_MODULE_4__utils__.a.has(this)) {
-                        var state = Object(__WEBPACK_IMPORTED_MODULE_4__utils__.g)(this);
+                        var state = Object(__WEBPACK_IMPORTED_MODULE_4__utils__.j)(this);
                         if (state.destroyQueued) {
                             clearTimeout(state.destroyQueued);
                             state.destroyQueued = null;
@@ -560,7 +623,7 @@
                         state.isMounted = true;
                         state.ready && this.mounted();
                     } else {
-                        Object(__WEBPACK_IMPORTED_MODULE_4__utils__.g)(this).isMounted = true;
+                        Object(__WEBPACK_IMPORTED_MODULE_4__utils__.j)(this).isMounted = true;
                         setupComponent(this);
                     }
                 }
@@ -571,7 +634,7 @@
                     // This seems to be currently the only way to ensure attached `onDestroy` logic run when
                     // the element is no longer needed.
                     if (__WEBPACK_IMPORTED_MODULE_4__utils__.a.has(this)) {
-                        var state = Object(__WEBPACK_IMPORTED_MODULE_4__utils__.g)(this);
+                        var state = Object(__WEBPACK_IMPORTED_MODULE_4__utils__.j)(this);
                         state.destroyQueued || (state.destroyQueued = setTimeout(this.destroy.bind(this), this.constructor.delayDestroy));
                         state.isMounted = false;
                         state.ready && this.unmounted();
@@ -584,11 +647,12 @@
                     if (this.constructor.prototype === this) throw new Error("can't be used on own prototype");
                     if (this._$props) return this._$props;
                     // On first call - setup the property on the instance
-                    var propDefinitions = Object(__WEBPACK_IMPORTED_MODULE_4__utils__.f)(this.constructor);
+                    var propDefinitions = Object(__WEBPACK_IMPORTED_MODULE_4__utils__.i)(this.constructor);
                     var props = {};
                     Object(__WEBPACK_IMPORTED_MODULE_1_common_micro_libs_src_jsutils_runtime_aliases__.f)(propDefinitions).forEach(function(propName) {
                         if (!propDefinitions[propName] || !propDefinitions[propName]._isAlias) {
-                            var propValue = propDefinitions[propName].default();
+                            var propValue = propDefinitions[propName].default.call(_this2);
+                            propDefinitions[propName].attr && !propDefinitions[propName].boolean && Object(__WEBPACK_IMPORTED_MODULE_4__utils__.c)(_this2, propDefinitions[propName]) && (propValue = Object(__WEBPACK_IMPORTED_MODULE_4__utils__.d)(_this2, propDefinitions[propName]));
                             Object(__WEBPACK_IMPORTED_MODULE_1_common_micro_libs_src_jsutils_runtime_aliases__.e)(props, propName, {
                                 configurable: true,
                                 enumerable: true,
@@ -641,7 +705,8 @@
          * @return {HTMLElement|DocumentFragment}
          */
                 value: function(eleInstance) {
-                    return Object(__WEBPACK_IMPORTED_MODULE_4__utils__.c)(eleInstance);
+                    // FIXME: should two additional params be provided - one to get templateInstance and another to get templateElement?
+                    return Object(__WEBPACK_IMPORTED_MODULE_4__utils__.f)(eleInstance);
                 }
             }, {
                 key: "tagName",
@@ -651,7 +716,7 @@
             }, {
                 key: "delayDestroy",
                 get: function() {
-                    return 5e3;
+                    return 250;
                 }
             }, {
                 key: "useShadow",
@@ -676,9 +741,9 @@
             }, {
                 key: "observedAttributes",
                 get: function() {
-                    var state = Object(__WEBPACK_IMPORTED_MODULE_4__utils__.b)(this);
+                    var state = Object(__WEBPACK_IMPORTED_MODULE_4__utils__.e)(this);
                     if (!state.observedAttrs) {
-                        var propList = Object(__WEBPACK_IMPORTED_MODULE_4__utils__.f)(this);
+                        var propList = Object(__WEBPACK_IMPORTED_MODULE_4__utils__.i)(this);
                         state.observedAttrs = Object(__WEBPACK_IMPORTED_MODULE_1_common_micro_libs_src_jsutils_runtime_aliases__.f)(propList).filter(function(p) {
                             return propList[p].attr;
                         });
@@ -689,7 +754,7 @@
             return ComponentElement;
         }(HTMLElement));
         function setupComponent(component) {
-            var state = Object(__WEBPACK_IMPORTED_MODULE_4__utils__.g)(component);
+            var state = Object(__WEBPACK_IMPORTED_MODULE_4__utils__.j)(component);
             var lastReadyState = null;
             var handleReadyChanges = function() {
                 if (lastReadyState === state.ready) return;
@@ -712,7 +777,7 @@
             component.onDestroy(state.readyWatcher);
             handleReadyChanges();
         }
-    }, /* 4 */
+    }, /* 5 */
     /***/
     function(module, __webpack_exports__, __webpack_require__) {
         "use strict";
@@ -730,7 +795,7 @@
         /* harmony import */
         var __WEBPACK_IMPORTED_MODULE_0_common_micro_libs_src_jsutils_runtime_aliases__ = __webpack_require__(0);
         /* harmony import */
-        var __WEBPACK_IMPORTED_MODULE_1_common_micro_libs_src_jsutils_Set__ = __webpack_require__(8);
+        var __WEBPACK_IMPORTED_MODULE_1_common_micro_libs_src_jsutils_Set__ = __webpack_require__(9);
         /* harmony import */
         var __WEBPACK_IMPORTED_MODULE_2_common_micro_libs_src_jsutils_nextTick__ = __webpack_require__(11);
         function _toConsumableArray(arr) {
@@ -1083,30 +1148,54 @@
         }
         /* harmony default export */
         __webpack_exports__.a = objectWatchProp;
-    }, /* 5 */
+    }, /* 6 */
     /***/
     function(module, __webpack_exports__, __webpack_require__) {
         "use strict";
-        /* WEBPACK VAR INJECTION */
-        (function(global) {
-            /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() {
-                return GLOBAL;
+        /* harmony export (immutable) */
+        __webpack_exports__.a = FakeIterator;
+        /* harmony import */
+        var __WEBPACK_IMPORTED_MODULE_0__runtime_aliases__ = __webpack_require__(0);
+        //-----------------------------------------------------------------------
+        // Great reference: http://2ality.com/2015/02/es6-iteration.html
+        function FakeIterator(keys, values) {
+            Object(__WEBPACK_IMPORTED_MODULE_0__runtime_aliases__.e)(this, "_", {
+                value: {
+                    keys: keys.slice(0),
+                    values: values ? values.slice(0) : null,
+                    idx: 0,
+                    total: keys.length
+                }
             });
-            /* unused harmony export getGlobal */
-            var _typeof = "function" === typeof Symbol && "symbol" === typeof Symbol.iterator ? function(obj) {
-                return typeof obj;
-            } : function(obj) {
-                return obj && "function" === typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
-            };
-            var GLOBAL = function() {
-                /* global self, window, global */
-                if ("undefined" !== ("undefined" === typeof window ? "undefined" : _typeof(window))) return window;
-                if ("undefined" !== ("undefined" === typeof global ? "undefined" : _typeof(global))) return global;
-                if ("undefined" !== ("undefined" === typeof self ? "undefined" : _typeof(self))) return self;
-                return Function("return this;")();
-            }();
-        }).call(__webpack_exports__, __webpack_require__(9));
-    }, /* 6 */
+        }
+        Object(__WEBPACK_IMPORTED_MODULE_0__runtime_aliases__.d)(FakeIterator.prototype, {
+            constructor: {
+                value: FakeIterator
+            },
+            next: {
+                enumerable: true,
+                configurable: true,
+                value: function() {
+                    var response = {
+                        done: this._.idx === this._.total
+                    };
+                    if (response.done) {
+                        response.value = void 0;
+                        return response;
+                    }
+                    var nextIdx = this._.idx++;
+                    response.value = this._.keys[nextIdx];
+                    this._.values && (response.value = [ response.value, this._.values[nextIdx] ]);
+                    return response;
+                }
+            }
+        });
+        Object(__WEBPACK_IMPORTED_MODULE_0__runtime_aliases__.e)(FakeIterator.prototype, __WEBPACK_IMPORTED_MODULE_0__runtime_aliases__.a, {
+            value: function() {
+                return this;
+            }
+        });
+    }, /* 7 */
     /***/
     function(module, __webpack_exports__, __webpack_require__) {
         "use strict";
@@ -1118,7 +1207,11 @@
             return CssVars;
         });
         /* harmony import */
-        var __WEBPACK_IMPORTED_MODULE_0_component_element__ = __webpack_require__(7);
+        var __WEBPACK_IMPORTED_MODULE_0_component_element__ = __webpack_require__(8);
+        /* harmony import */
+        var __WEBPACK_IMPORTED_MODULE_1_common_micro_libs_src_jsutils_runtime_aliases__ = __webpack_require__(0);
+        /* harmony import */
+        var __WEBPACK_IMPORTED_MODULE_2__vars_default__ = __webpack_require__(18);
         var _createClass = function() {
             function defineProperties(target, props) {
                 for (var i = 0; i < props.length; i++) {
@@ -1155,7 +1248,7 @@
             superClass && (Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass);
         }
         //=========================================================================
-        var CSS_VARS_LIST = void 0;
+        var CSS_VAR_LIST = Object(__WEBPACK_IMPORTED_MODULE_1_common_micro_libs_src_jsutils_runtime_aliases__.f)(__WEBPACK_IMPORTED_MODULE_2__vars_default__.a);
         /**
  * An element that exposes several CSS variables that can be controlled and thus affect
  * the inner elements. Use it for styling common widgets
@@ -1172,26 +1265,45 @@
             _createClass(CssVars, [ {
                 key: "init",
                 value: function() {
+                    this[__WEBPACK_IMPORTED_MODULE_0_component_element__.b] = {
+                        active: {}
+                    };
                     /**
-             *
-             * @event CssVars#set-theme
+             * Set a new list of CSS Vars to the element.
+             * The list of CSS Variables should be in the event's `details`.
+             * @event CssVars#set-vars
              * @extends CustomEvent
              * @type {CustomEvent}
              */
-                    this.on("set-theme", this);
+                    this.on("set-vars", this);
                 }
             }, {
                 key: "handleEvent",
-                value: function(ev) {}
+                value: function(ev) {
+                    ev.type;
+                }
             }, {
-                key: "getCssVars",
+                key: "clear",
                 value: function() {
-                    if (CSS_VARS_LIST) return CSS_VARS_LIST.slice(0);
-                    CSS_VARS_LIST = [];
-                    var findCssVars = /(--.*):/g;
-                    var matchArr = void 0;
-                    for (;null !== (matchArr = findCssVars.exec(CssVars.template)); ) CSS_VARS_LIST.push(matchArr[1].trim());
-                    return CSS_VARS_LIST.slice(0);
+                    var _this2 = this;
+                    Object(__WEBPACK_IMPORTED_MODULE_1_common_micro_libs_src_jsutils_runtime_aliases__.f)(this[__WEBPACK_IMPORTED_MODULE_0_component_element__.b].active).forEach(function(cssPropName) {
+                        return _this2.style.removeProperty(cssPropName);
+                    });
+                    this[__WEBPACK_IMPORTED_MODULE_0_component_element__.b].active = {};
+                }
+            }, {
+                key: "set",
+                value: function(vars) {
+                    var _this3 = this;
+                    Object(__WEBPACK_IMPORTED_MODULE_1_common_micro_libs_src_jsutils_runtime_aliases__.f)(vars).forEach(function(varName) {
+                        _this3.style.setProperty(varName, vars[varName]);
+                        _this3[__WEBPACK_IMPORTED_MODULE_0_component_element__.b].active[varName] = vars[varName];
+                    });
+                }
+            }, {
+                key: "getVarNames",
+                value: function() {
+                    return CSS_VAR_LIST.slice(0);
                 }
             } ], [ {
                 key: "tagName",
@@ -1201,38 +1313,51 @@
             }, {
                 key: "template",
                 get: function() {
-                    return '\n<style>\n:host {\n    display: block;\n\n    /*  ---------------------------------- *        COLORS\n    *  ---------------------------------- */\n    /*\n        All colors are normally defined starting with the lightest one\n    */\n    \n    /* == PRIMARY COLORS == */\n    --theme-color-0: rgb(255,255,255);\n    --theme-color-1: rgb(236, 236, 236);\n    --theme-color-2: rgb(220, 220, 220);\n    --theme-color-3: rgb(197, 197, 197);\n    --theme-color-4: rgb(173, 173, 173);\n    --theme-color-5: rgb(138, 138, 138);\n    --theme-color-6: rgb(101, 101, 101);\n    --theme-color-7: rgb(86, 86, 86);\n    --theme-color-8: rgb(45, 45, 45);\n    --theme-color-9: rgb(0,0,0);\n    \n    /* == SECONDARY COLOR: info (usually in the blue color) == */\n    --theme-color-accent-info-0: #def3ff;\n    --theme-color-accent-info-1: #bee1f4;\n    --theme-color-accent-info-2: #39a5dc;\n    --theme-color-accent-info-3: #0088ce;\n    --theme-color-accent-info-4: #00659c;\n    \n\n    /* == SECONDARY COLOR: success (usually in the green color) == */\n    --theme-color-accent-success-0: #cfe7cd;\n    --theme-color-accent-success-1: #9ecf99;\n    --theme-color-accent-success-2: #6ec664;\n    --theme-color-accent-success-3: #3f9c35;\n    --theme-color-accent-success-4: #2d7623;\n\n\n    /* == SECONDARY COLOR: alert (usually in the Yellow color) == */\n    /*    https://coolors.co/fcf6e3-f9e4a4-f9d463-f9c62c-dda600     */\n    --theme-color-accent-alert-0: #fcf6e3;\n    --theme-color-accent-alert-1: #f9e4a4;\n    --theme-color-accent-alert-2: #f9d463;\n    --theme-color-accent-alert-3: #f9c62c;\n    --theme-color-accent-alert-4: #dda600;\n    \n    /* == SECONDARY COLOR: warning (usually in the orange color) == */\n    /*    https://coolors.co/ffe2af-ffc57a-ffa86b-ff8330-f4581f     */\n    --theme-color-accent-warning-0: #ffe2af;\n    --theme-color-accent-warning-1: #ffc57a;\n    --theme-color-accent-warning-2: #ffa86b;\n    --theme-color-accent-warning-3: #ff8330;\n    --theme-color-accent-warning-4: #f4581f;\n    \n    \n    /* == SECONDARY COLOR: error (usually in the error color) == */\n    /*    https://coolors.co/f9caca-ff7a7a-ff4b4b-ff171a-bd1818  */\n    --theme-color-accent-error-0: #F9CACA;\n    --theme-color-accent-error-1: #FF7A7A;\n    --theme-color-accent-error-2: #FF4B4B;\n    --theme-color-accent-error-3: #FF171A;\n    --theme-color-accent-error-4: #BD1818;\n\n\n    /* == BACKGROUND / FORGROUND == */\n    --theme-color-bg: var(--theme-color-0);\n    --theme-color-fg: var(--theme-color-9);\n\n    /* == LINKS == */\n    --theme-color-link: var(--theme-color-accent-info-3);\n    \n    /* == MESSAGES == */\n    --theme-color-msg-success-bg: var(--theme-color-accent-success-0);\n    --theme-color-msg-success-fg: var(--theme-color-accent-success-4);\n\n    --theme-color-msg-alert-bg: var(--theme-color-accent-alert-0);\n    --theme-color-msg-alert-fg: var(--theme-color-accent-alert-4);\n    \n    --theme-color-msg-warning-bg: var(--theme-color-accent-warning-0);\n    --theme-color-msg-warning-fg: var(--theme-color-accent-warning-4);\n\n    --theme-color-msg-info-bg: var(--theme-color-accent-info-0);\n    --theme-color-msg-info-fg: var(--theme-color-accent-info-4);\n\n    --theme-color-msg-error-bg: var(--theme-color-accent-error-0);\n    --theme-color-msg-error-fg: var(--theme-color-accent-error-4);\n\n    /*  ---------------------------------- *        FONTS\n    *  ---------------------------------- */\n    --theme-font-size-xxl: 28px;\n    --theme-font-size-xl: 21px;\n    --theme-font-size-l: 17px;\n    --theme-font-size-m: 14px;\n    --theme-font-size-s: 12px;\n    --theme-font-size-xs: 11px;\n    \n    --theme-font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";\n    --theme-font-family-monospace: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;\n\n    /*  ---------------------------------- *        BORDERS\n    *  ---------------------------------- */\n    --theme-border-style: solid;\n    --theme-border-width: 1px;\n    --theme-border-color: var(--theme-color-5);\n    --theme-border-radius: 3px;\n    \n     --theme-border: var(--theme-border-width) var(--theme-border-style) var(--theme-border-color);\n\n    /*  ---------------------------------- *        SPACING and PADDING\n    *  ---------------------------------- */\n    --theme-spacing-0: 0;\n    --theme-spacing-1: 0.25rem;\n    --theme-spacing-2: 0.5rem;\n    --theme-spacing-3: 0.75rem;\n    --theme-spacing-4: 1rem;\n    --theme-spacing-5: 1.25rem;\n    --theme-spacing-6: 1.5rem;\n    --theme-spacing-7: 1.75rem;\n    --theme-spacing-8: 2rem;\n    \n    /*  ---------------------------------- *        AFFECTS\n    *  ---------------------------------- */\n    --theme-box-shadow: 0 8px 10px 1px rgba(0,0,0,0.14), 0 3px 14px 2px rgba(0,0,0,0.12), 0 5px 5px -3px rgba(0,0,0,0.2);\n}\n</style>\n<slot></slot>';
+                    return "\n<style>\n:host {\n    display: block;\n\n    " + CSS_VAR_LIST.reduce(function(allVars, varName) {
+                        allVars += varName + ": " + __WEBPACK_IMPORTED_MODULE_2__vars_default__.a[varName] + ";\n";
+                        return allVars;
+                    }, "") + "\n}\n</style>\n<slot></slot>";
                 }
             } ]);
             return CssVars;
         }(__WEBPACK_IMPORTED_MODULE_0_component_element__.a);
         /* harmony default export */
         __webpack_exports__.default = CssVars;
-    }, /* 7 */
+    }, /* 8 */
     /***/
     function(module, __webpack_exports__, __webpack_require__) {
         "use strict";
         /* harmony import */
-        var __WEBPACK_IMPORTED_MODULE_0__ComponentElement__ = __webpack_require__(3);
+        var __WEBPACK_IMPORTED_MODULE_0__ComponentElement__ = __webpack_require__(4);
         /* harmony namespace reexport (by used) */
         __webpack_require__.d(__webpack_exports__, "a", function() {
             return __WEBPACK_IMPORTED_MODULE_0__ComponentElement__.a;
         });
         /* harmony import */
-        __webpack_require__(15);
+        __webpack_require__(16);
         /* unused harmony namespace reexport */
         /* harmony import */
-        __webpack_require__(1);
-    }, /* 8 */
+        __webpack_require__(17);
+        /* unused harmony namespace reexport */
+        /* harmony import */
+        var __WEBPACK_IMPORTED_MODULE_3__utils__ = __webpack_require__(1);
+        /* unused harmony reexport getState */
+        /* unused harmony reexport getComponentTemplate */
+        /* unused harmony reexport getComponentInstanceTemplate */
+        /* harmony reexport (binding) */
+        __webpack_require__.d(__webpack_exports__, "b", function() {
+            return __WEBPACK_IMPORTED_MODULE_3__utils__.b;
+        });
+    }, /* 9 */
     /***/
     function(module, __webpack_exports__, __webpack_require__) {
         "use strict";
         /* unused harmony export Set */
         /* unused harmony export FakeSet */
         /* harmony import */
-        var __WEBPACK_IMPORTED_MODULE_0__getGlobal__ = __webpack_require__(5);
+        var __WEBPACK_IMPORTED_MODULE_0__getGlobal__ = __webpack_require__(3);
         /* harmony import */
-        var __WEBPACK_IMPORTED_MODULE_1__Iterator__ = __webpack_require__(10);
+        var __WEBPACK_IMPORTED_MODULE_1__Iterator__ = __webpack_require__(6);
         /* harmony import */
         var __WEBPACK_IMPORTED_MODULE_2__runtime_aliases__ = __webpack_require__(0);
         //============================================================
@@ -1304,11 +1429,11 @@
                 }
             },
             forEach: {
-                value: function(cb) {
+                value: function(cb, thisArg) {
                     var _this = this;
                     this._.forEach(function(item) {
                         return cb(item, item, _this);
-                    });
+                    }, thisArg);
                 }
             }
         }, __WEBPACK_IMPORTED_MODULE_2__runtime_aliases__.a, {
@@ -1316,7 +1441,7 @@
                 return this.values();
             }
         }));
-    }, /* 9 */
+    }, /* 10 */
     /***/
     function(module, exports) {
         var _typeof = "function" === typeof Symbol && "symbol" === typeof Symbol.iterator ? function(obj) {
@@ -1340,53 +1465,6 @@
         // We return undefined, instead of nothing here, so it's
         // easier to handle this case. if(!global) { ...}
         module.exports = g;
-    }, /* 10 */
-    /***/
-    function(module, __webpack_exports__, __webpack_require__) {
-        "use strict";
-        /* harmony export (immutable) */
-        __webpack_exports__.a = FakeIterator;
-        /* harmony import */
-        var __WEBPACK_IMPORTED_MODULE_0__runtime_aliases__ = __webpack_require__(0);
-        //-----------------------------------------------------------------------
-        // Great reference: http://2ality.com/2015/02/es6-iteration.html
-        function FakeIterator(keys, values) {
-            Object(__WEBPACK_IMPORTED_MODULE_0__runtime_aliases__.e)(this, "_", {
-                value: {
-                    keys: keys.slice(0),
-                    values: values ? values.slice(0) : null,
-                    idx: 0,
-                    total: keys.length
-                }
-            });
-        }
-        Object(__WEBPACK_IMPORTED_MODULE_0__runtime_aliases__.d)(FakeIterator.prototype, {
-            constructor: {
-                value: FakeIterator
-            },
-            next: {
-                enumerable: true,
-                configurable: true,
-                value: function() {
-                    var response = {
-                        done: this._.idx === this._.total
-                    };
-                    if (response.done) {
-                        response.value = void 0;
-                        return response;
-                    }
-                    var nextIdx = this._.idx++;
-                    response.value = this._.keys[nextIdx];
-                    this._.values && (response.value = [ response.value, this._.values[nextIdx] ]);
-                    return response;
-                }
-            }
-        });
-        Object(__WEBPACK_IMPORTED_MODULE_0__runtime_aliases__.e)(FakeIterator.prototype, __WEBPACK_IMPORTED_MODULE_0__runtime_aliases__.a, {
-            value: function() {
-                return this;
-            }
-        });
     }, /* 11 */
     /***/
     function(module, __webpack_exports__, __webpack_require__) {
@@ -1566,13 +1644,50 @@
     /***/
     function(module, __webpack_exports__, __webpack_require__) {
         "use strict";
+        /* harmony export (binding) */
+        __webpack_require__.d(__webpack_exports__, "a", function() {
+            return _Symbol;
+        });
+        /* unused harmony export FakeSymbol */
+        /* harmony import */
+        var __WEBPACK_IMPORTED_MODULE_0__getGlobal__ = __webpack_require__(3);
+        /* harmony import */
+        var __WEBPACK_IMPORTED_MODULE_1__Iterator__ = __webpack_require__(6);
+        //============================================================
+        var UNIQUE = Math.random().toString(36).substring(7);
+        var COUNTER = 1;
+        var SYMBOL_PROTOTYPE = {
+            toString: function() {
+                return "Symbol(" + this.description + ")." + this._id;
+            },
+            valueOf: function() {
+                return this.toString();
+            }
+        };
+        var _Symbol = __WEBPACK_IMPORTED_MODULE_0__getGlobal__.a.Symbol || FakeSymbol;
+        function FakeSymbol(description) {
+            if (this instanceof FakeSymbol) throw new TypeError("FakeSymbol is not a constructor");
+            return Object.create(SYMBOL_PROTOTYPE, {
+                description: {
+                    value: arguments.length ? description : ""
+                },
+                _id: {
+                    value: UNIQUE + "." + COUNTER++
+                }
+            });
+        }
+        __WEBPACK_IMPORTED_MODULE_1__Iterator__.a.iterator = __WEBPACK_IMPORTED_MODULE_1__Iterator__.a;
+    }, /* 15 */
+    /***/
+    function(module, __webpack_exports__, __webpack_require__) {
+        "use strict";
         /* harmony export (immutable) */
         __webpack_exports__.a = prepareComponentTemplate;
         /* harmony export (immutable) */
         __webpack_exports__.b = styleComponentInstanceElement;
         /* unused harmony export reStyleComponentInstanceSubtree */
         /* harmony import */
-        var __WEBPACK_IMPORTED_MODULE_0_common_micro_libs_src_jsutils_getGlobal__ = __webpack_require__(5);
+        var __WEBPACK_IMPORTED_MODULE_0_common_micro_libs_src_jsutils_getGlobal__ = __webpack_require__(3);
         /* harmony import */
         var __WEBPACK_IMPORTED_MODULE_1__utils__ = __webpack_require__(1);
         //--------------------------------------------------------------
@@ -1594,7 +1709,7 @@
             // FIXME: need additional checks here. ONly use shady if ShadowDom is not supported natively.
             //              need to use: ShadyCSS.nativeShadow to check if shadowroot is supported
             //              Also: should we check the Component's "useShadow" property?
-            supportsShadyCSS() && __WEBPACK_IMPORTED_MODULE_0_common_micro_libs_src_jsutils_getGlobal__.a.ShadyCSS.prepareTemplate(Object(__WEBPACK_IMPORTED_MODULE_1__utils__.d)(Component), tagName);
+            supportsShadyCSS() && __WEBPACK_IMPORTED_MODULE_0_common_micro_libs_src_jsutils_getGlobal__.a.ShadyCSS.prepareTemplate(Object(__WEBPACK_IMPORTED_MODULE_1__utils__.g)(Component), tagName);
         }
         /**
  * Styles the instance of a custom element using ShadyCSS
@@ -1604,7 +1719,7 @@
         function styleComponentInstanceElement(componentInstance) {
             supportsShadyCSS() && __WEBPACK_IMPORTED_MODULE_0_common_micro_libs_src_jsutils_getGlobal__.a.ShadyCSS.styleElement(componentInstance);
         }
-    }, /* 15 */
+    }, /* 16 */
     /***/
     function(module, __webpack_exports__, __webpack_require__) {
         "use strict";
@@ -1615,6 +1730,124 @@
         __webpack_require__(0);
         /* harmony import */
         __webpack_require__(1);
+    }, /* 17 */
+    /***/
+    function(module, __webpack_exports__, __webpack_require__) {
+        "use strict";
+        /* unused harmony export bind */
+        /* harmony import */
+        __webpack_require__(0);
+    }, /* 18 */
+    /***/
+    function(module, __webpack_exports__, __webpack_require__) {
+        "use strict";
+        /* harmony export (binding) */
+        __webpack_require__.d(__webpack_exports__, "a", function() {
+            return varsDefault;
+        });
+        /*
+    All colors are normally defined starting with the lightest one
+*/
+        var varsDefault = {
+            //---------------------------------------------------------------
+            //                                                  COLORS
+            //---------------------------------------------------------------
+            /* == PRIMARY COLORS == */
+            "--theme-color-0": "#FFFFFF",
+            "--theme-color-1": "#ECECEC",
+            "--theme-color-2": "#DCDCDC",
+            "--theme-color-3": "#C5C5C5",
+            "--theme-color-4": "#ADADAD",
+            "--theme-color-5": "#8A8A8A",
+            "--theme-color-6": "#656565",
+            "--theme-color-7": "#565656",
+            "--theme-color-8": "#2D2D2D",
+            "--theme-color-9": "#000000",
+            /* == SECONDARY COLOR: info (usually in the blue color) == */
+            "--theme-color-accent-info-0": "#def3ff",
+            "--theme-color-accent-info-1": "#bee1f4",
+            "--theme-color-accent-info-2": "#39a5dc",
+            "--theme-color-accent-info-3": "#0088ce",
+            "--theme-color-accent-info-4": "#00659c",
+            /* == SECONDARY COLOR: success (usually in the green color) == */
+            "--theme-color-accent-success-0": "#cfe7cd",
+            "--theme-color-accent-success-1": "#9ecf99",
+            "--theme-color-accent-success-2": "#6ec664",
+            "--theme-color-accent-success-3": "#3f9c35",
+            "--theme-color-accent-success-4": "#2d7623",
+            /* == SECONDARY COLOR: alert (usually in the Yellow color) == */
+            /*    https://coolors.co/fcf6e3-f9e4a4-f9d463-f9c62c-dda600     */
+            "--theme-color-accent-alert-0": "#fcf6e3",
+            "--theme-color-accent-alert-1": "#f9e4a4",
+            "--theme-color-accent-alert-2": "#f9d463",
+            "--theme-color-accent-alert-3": "#f9c62c",
+            "--theme-color-accent-alert-4": "#dda600",
+            /* == SECONDARY COLOR: warning (usually in the orange color) == */
+            /*    https://coolors.co/ffe2af-ffc57a-ffa86b-ff8330-f4581f     */
+            "--theme-color-accent-warning-0": "#ffe2af",
+            "--theme-color-accent-warning-1": "#ffc57a",
+            "--theme-color-accent-warning-2": "#ffa86b",
+            "--theme-color-accent-warning-3": "#ff8330",
+            "--theme-color-accent-warning-4": "#f4581f",
+            /* == SECONDARY COLOR: error (usually in the error color) == */
+            /*    https://coolors.co/f9caca-ff7a7a-ff4b4b-ff171a-bd1818  */
+            "--theme-color-accent-error-0": "#F9CACA",
+            "--theme-color-accent-error-1": "#FF7A7A",
+            "--theme-color-accent-error-2": "#FF4B4B",
+            "--theme-color-accent-error-3": "#FF171A",
+            "--theme-color-accent-error-4": "#BD1818",
+            /* == BACKGROUND / FORGROUND == */
+            "--theme-color-bg": "var(--theme-color-0)",
+            "--theme-color-fg": "var(--theme-color-9)",
+            /* == LINKS == */
+            "--theme-color-link": "var(--theme-color-accent-info-3)",
+            /* == MESSAGES == */
+            "--theme-color-msg-success-bg": "var(--theme-color-accent-success-0)",
+            "--theme-color-msg-success-fg": "var(--theme-color-accent-success-4)",
+            "--theme-color-msg-alert-bg": "var(--theme-color-accent-alert-0)",
+            "--theme-color-msg-alert-fg": "var(--theme-color-accent-alert-4)",
+            "--theme-color-msg-warning-bg": "var(--theme-color-accent-warning-0)",
+            "--theme-color-msg-warning-fg": "var(--theme-color-accent-warning-4)",
+            "--theme-color-msg-info-bg": "var(--theme-color-accent-info-0)",
+            "--theme-color-msg-info-fg": "var(--theme-color-accent-info-4)",
+            "--theme-color-msg-error-bg": "var(--theme-color-accent-error-0)",
+            "--theme-color-msg-error-fg": "var(--theme-color-accent-error-4)",
+            //---------------------------------------------------------------
+            //                                                  FONTS
+            //---------------------------------------------------------------
+            "--theme-font-size-xxl": "28px",
+            "--theme-font-size-xl": "21px",
+            "--theme-font-size-l": "17px",
+            "--theme-font-size-m": "14px",
+            "--theme-font-size-s": "12px",
+            "--theme-font-size-xs": "11px",
+            "--theme-font-family": '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"',
+            "--theme-font-family-monospace": 'SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace',
+            //---------------------------------------------------------------
+            //                                                  BORDERS
+            //---------------------------------------------------------------
+            "--theme-border-style": "solid",
+            "--theme-border-width": "1px",
+            "--theme-border-color": "var(--theme-color-5)",
+            "--theme-border-radius": "3px",
+            "--theme-border": "var(--theme-border-width) var(--theme-border-style) var(--theme-border-color)",
+            //---------------------------------------------------------------
+            //                                     SPACING AND PADDING
+            //---------------------------------------------------------------
+            "--theme-spacing-0": "0",
+            "--theme-spacing-1": "0.25rem",
+            "--theme-spacing-2": "0.5rem",
+            "--theme-spacing-3": "0.75rem",
+            "--theme-spacing-4": "1rem",
+            "--theme-spacing-5": "1.25rem",
+            "--theme-spacing-6": "1.5rem",
+            "--theme-spacing-7": "1.75rem",
+            "--theme-spacing-8": "2rem",
+            //---------------------------------------------------------------
+            //                                              AFFECTS
+            //---------------------------------------------------------------
+            "--theme-box-shadow": "0 8px 10px 1px rgba(0,0,0,0.14), 0 3px 14px 2px rgba(0,0,0,0.12), 0 5px 5px -3px rgba(0,0,0,0.2)"
+        };
     } ]);
 });
 //# sourceMappingURL=css-vars-element.js.map

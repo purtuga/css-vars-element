@@ -21,6 +21,7 @@
   ],
   "author": "Paul Tavares",
   "license": "MIT",
+  "repository": "git@github.com:purtuga/css-vars-element.git",
   "devDependencies": {
     "project-base": "github:purtuga/project-base",
     "project-showcase": "github:purtuga/project-showcase"

@@ -6,7 +6,7 @@ showcase("Borders and Spacing", function($content) {
     $themePicker.setAttribute("style", "display:grid; grid:auto / repeat(4, 1fr);grid-gap:2em;");
     $content.appendChild($themePicker);
 
-    const allThemCssVars = $themePicker.getCssVars();
+    const allThemCssVars = $themePicker.getVarNames();
     let $div;
     let isMatch;
 
@@ -43,7 +43,7 @@ showcase("Borders and Spacing", function($content) {
         if (isMatch.test(cssVarName)) {
             const $p = document.createElement("p");
             $p.innerHTML = `<div style="border: var(--theme-border-width) var(--theme-border-style) var(--theme-border-color);padding: var(${cssVarName});">
-<div style="padding: var(--theme-spacing-1); background-color: var(--theme-color-1)">${cssVarName}</div>
+<div style="padding: var(--theme-spacing-1); background-color: var(--theme-color-accent-info-0)">${cssVarName}</div>
 </div>`;
             $div.appendChild($p);
         }

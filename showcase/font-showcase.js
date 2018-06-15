@@ -6,7 +6,7 @@ showcase("Fonts", function($content) {
     $themePicker.setAttribute("style", "display:grid; grid:auto / repeat(4, 1fr);grid-gap:2em;");
     $content.appendChild($themePicker);
 
-    const allThemCssVars = $themePicker.getCssVars();
+    const allThemCssVars = $themePicker.getVarNames();
     let $div;
     let isMatch;
 
