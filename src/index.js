@@ -1,4 +1,5 @@
-import {ComponentElement, prop} from "component-element"
+import {ComponentElement, prop, STATE_SYMBOL} from "component-element"
+import {domFind} from "common-micro-libs/src/domutils/domFind"
 import {objectKeys} from "common-micro-libs/src/jsutils/runtime-aliases"
 import {varsDefault} from "./vars-default";
 
@@ -47,7 +48,26 @@ export class CssVars extends ComponentElement {
         return newVars;
     }
 
+
+    /**
+     * A DOM selector to where the css vars will also be set. This will be in addition to
+     * setting the vars on this element itself.
+     *
+     * @property
+     * @type {String}
+     * @example
+     *
+     * <css-vars to":root"></css-vars>
+     */
+    @prop({attr: true})
+    get target() {}
+
+
     init() {
+        this[STATE_SYMBOL] = {
+            priorTo: null
+        };
+
         /**
          * Set a new list of CSS Vars to the element.
          * The list of CSS Variables should be in the event's `details`.
@@ -59,7 +79,14 @@ export class CssVars extends ComponentElement {
          * @property {Object} detail
          */
         this.on("set-vars", this);
-        this.onPropsChange(() => setStyleVarsOnElement(this, this.props.vars), "vars");
+        this.onPropsChange(() => {
+            setCustomVars(this, this.props.vars);
+            setStyleVarsOnToElements(this);
+        }, "vars");
+        this.onPropsChange(() => {
+            clearStyleVarsFromToElements(this);
+            setStyleVarsOnToElements(this)
+        }, "target");
     }
 
     handleEvent(ev) {
@@ -75,12 +102,8 @@ export class CssVars extends ComponentElement {
      * (essentially: clears out props.vars object)
      */
     clear() {
-        const varsKeys = objectKeys(this.props.vars);
-        if (varsKeys.length) {
-            varsKeys.forEach(cssPropName => this.style.removeProperty(cssPropName));
-            this.props.vars = {};
-            this.emit("change", null, {bubble: true});
-        }
+        clearCustomVars(this, this.props.vars);
+        this.props.vars = {};
     }
 
     /**
@@ -93,19 +116,48 @@ export class CssVars extends ComponentElement {
     }
 }
 
-function setStyleVarsOnElement(ele, vars) {
+function setCustomVars(ele, vars, emit = true) {
     const varsKeys = objectKeys(vars);
     if (varsKeys.length) {
         varsKeys.forEach(varName => {
             ele.style.setProperty(varName, vars[varName]);
         });
 
-        /**
-         * Style variables have changed
-         * @event CssVars#change
-         */
-        this.emit("change", null, {bubble: true});
+        if (emit && ele.emit) {
+            /**
+             * Style variables have changed
+             * @event CssVars#change
+             */
+            ele.emit("change", null, {bubble: true});
+        }
     }
 }
+
+function clearCustomVars(ele, vars, emit = true) {
+    const varsKeys = objectKeys(vars);
+    if (varsKeys.length) {
+        varsKeys.forEach(cssPropName => ele.style.removeProperty(cssPropName));
+        if (emit && ele.emit) {
+            this.emit("change", null, {bubble: true});
+        }
+    }
+}
+
+function setStyleVarsOnToElements(cssVarsInst) {
+    if (cssVarsInst.props.target) {
+        domFind(document, cssVarsInst.props.target).forEach(targetEle => {
+            setCustomVars(targetEle, cssVarsInst.props.vars, false);
+        });
+        cssVarsInst[STATE_SYMBOL].priorTo = cssVarsInst.props.target;
+    }
+}
+
+function clearStyleVarsFromToElements(cssVarsInst) {
+    if (cssVarsInst[STATE_SYMBOL].priorTo) {
+        domFind(document, cssVarsInst[STATE_SYMBOL].priorTo).forEach(targetEle => clearCustomVars(targetEle, cssVarsInst.props.vars, false));
+        cssVarsInst[STATE_SYMBOL].priorTo = null;
+    }
+}
+
 
 export default CssVars;
