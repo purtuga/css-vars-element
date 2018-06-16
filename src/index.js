@@ -1,10 +1,14 @@
-import {ComponentElement, prop, STATE_SYMBOL} from "component-element"
+import {ComponentElement, prop, bind, STATE_SYMBOL} from "component-element"
 import {domFind} from "common-micro-libs/src/domutils/domFind"
 import {objectKeys} from "common-micro-libs/src/jsutils/runtime-aliases"
 import {varsDefault} from "./vars-default";
 
 //=========================================================================
 const CSS_VAR_LIST = objectKeys(varsDefault);
+const VARS_DEFAULT_STYLESHEET = CSS_VAR_LIST.reduce((allVars, varName) => {
+    allVars += `${varName}: ${varsDefault[varName]};` + "\n";
+    return allVars;
+}, "");
 
 /**
  * An element that exposes several CSS variables that can be controlled and thus affect
@@ -24,10 +28,7 @@ export class CssVars extends ComponentElement {
 :host {
     display: block;
 
-    ${CSS_VAR_LIST.reduce((allVars, varName) => {
-        allVars += `${varName}: ${varsDefault[varName]};` + "\n";
-        return allVars;
-    }, "")}
+    ${VARS_DEFAULT_STYLESHEET}
 }
 </style>
 <slot></slot>`;
@@ -65,7 +66,8 @@ export class CssVars extends ComponentElement {
 
     init() {
         this[STATE_SYMBOL] = {
-            priorTo: null
+            priorTarget: null,
+            $style: null
         };
 
         /**
@@ -79,14 +81,46 @@ export class CssVars extends ComponentElement {
          * @property {Object} detail
          */
         this.on("set-vars", this);
-        this.onPropsChange(() => {
-            setCustomVars(this, this.props.vars);
-            setStyleVarsOnToElements(this);
-        }, "vars");
-        this.onPropsChange(() => {
-            clearStyleVarsFromToElements(this);
-            setStyleVarsOnToElements(this)
-        }, "target");
+
+        // When `vars` change - set vars that were provided
+        this.onPropsChange(this._handleCustomVarsChange, "vars");
+
+        // When `target` changes, clean out existing <style> tag for defaults and apply new one
+        this.onPropsChange(this._handleTargetChange, "target");
+
+        this.onDestroy(() => {
+            clearDefaultVarsForTargetElements(this);
+            clearCustomVarsFromTargetElements(this);
+        });
+    }
+
+    @bind
+    _handleCustomVarsChange() {
+        setCustomVars(this, this.props.vars);
+        setCustomVarsOnTargetElements(this);
+    }
+
+
+    @bind
+    _handleTargetChange() {
+        // Tear down and create new (if applicable) default styles for selector
+        if (this[STATE_SYMBOL].priorTarget && this[STATE_SYMBOL].priorTarget !== this.props.target) {
+            clearDefaultVarsForTargetElements(this);
+            clearCustomVarsFromTargetElements(this);
+        }
+
+        if (this.props.target) {
+            // If no defaults are yet created for this target, do it now
+            if (!this[STATE_SYMBOL].$style) {
+                this[STATE_SYMBOL].$style = createStyleElement(`
+${this.props.target} {
+    ${VARS_DEFAULT_STYLESHEET}
+}
+`);
+            }
+
+            setCustomVarsOnTargetElements(this);
+        }
     }
 
     handleEvent(ev) {
@@ -143,21 +177,50 @@ function clearCustomVars(ele, vars, emit = true) {
     }
 }
 
-function setStyleVarsOnToElements(cssVarsInst) {
+function setCustomVarsOnTargetElements(cssVarsInst) {
     if (cssVarsInst.props.target) {
         domFind(document, cssVarsInst.props.target).forEach(targetEle => {
             setCustomVars(targetEle, cssVarsInst.props.vars, false);
         });
-        cssVarsInst[STATE_SYMBOL].priorTo = cssVarsInst.props.target;
+        cssVarsInst[STATE_SYMBOL].priorTarget = cssVarsInst.props.target;
     }
 }
 
-function clearStyleVarsFromToElements(cssVarsInst) {
-    if (cssVarsInst[STATE_SYMBOL].priorTo) {
-        domFind(document, cssVarsInst[STATE_SYMBOL].priorTo).forEach(targetEle => clearCustomVars(targetEle, cssVarsInst.props.vars, false));
-        cssVarsInst[STATE_SYMBOL].priorTo = null;
+function clearCustomVarsFromTargetElements(cssVarsInst) {
+    if (cssVarsInst[STATE_SYMBOL].priorTarget) {
+        domFind(document, cssVarsInst[STATE_SYMBOL].priorTarget).forEach(targetEle => {
+            clearCustomVars(targetEle, cssVarsInst.props.vars, false);
+        });
+        cssVarsInst[STATE_SYMBOL].priorTarget = null;
     }
 }
 
+function clearDefaultVarsForTargetElements(cssVarsInst) {
+    if (cssVarsInst[STATE_SYMBOL].$style) {
+        cssVarsInst[STATE_SYMBOL].$style.parentNode.removeChild(cssVarsInst[STATE_SYMBOL].$style);
+        cssVarsInst[STATE_SYMBOL].$style = null;
+    }
+}
+
+function createStyleElement(stylesheetContent) {
+    const style = document.createElement("style");
+    const head = document.head;
+
+    style.type = "text/css";
+
+    if (style.styleSheet) {
+        style.styleSheet.cssText = stylesheetContent;
+    } else {
+        style.appendChild(document.createTextNode(stylesheetContent));
+    }
+
+    if (head.hasChildNodes()) {
+        head.insertBefore(style, head.firstChild)
+    } else {
+        head.appendChild(style);
+    }
+
+    return style;
+}
 
 export default CssVars;
