@@ -31,8 +31,8 @@ document.querySelector("#ui").innerHTML = `
 
 # TODO
 
-- [ ] Add support for being able to set the vars on given selector or :root alias
-- [ ] Add method to apply vars
-- [ ] Add support for listening to 'set-theme' event (should be given them name or object with vars)
+- [x] Add support for being able to set the vars on given selector or :root alias
+- [x] Add method to apply vars (using vars prop)
+- [x] Add support for listening to 'set-vars' event (should be given them name or object with vars)
 - [ ] Add ability to define theme to display via html attribute on the CE
 - [ ] Add widget that allow user to select their own theme
