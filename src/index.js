@@ -44,7 +44,11 @@ export class CssVars extends ComponentElement {
     set vars(newVars) {
         if ("object" !== typeof newVars) {
             console.warn("vars prop must be an object!"); // eslint-disable-line
-            return this.vars;
+            newVars = {};
+        }
+        if (this.vars && newVars !== this.vars) {
+            clearCustomVars(this, this.vars, false);
+            clearCustomVarsFromTargetElements(this);
         }
         return newVars;
     }
