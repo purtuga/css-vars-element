@@ -98,6 +98,12 @@ export class CssVars extends ComponentElement {
         });
     }
 
+    ready() {
+        this._handleCustomVarsChange();
+        this._handleTargetChange();
+    }
+
+
     @bind
     _handleCustomVarsChange() {
         setCustomVars(this, this.props.vars);
