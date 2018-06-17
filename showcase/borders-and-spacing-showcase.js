@@ -52,16 +52,57 @@ showcase("Borders and Spacing", function($content) {
     $div = null;
 
 
-    // Sizes  ----------------------------------------------------------------
+    // Affects  ----------------------------------------------------------------
     $div = document.createElement("div");
     $div.innerHTML = `<h3>Affects</h3>
 <div style="
     width: 90%;
     box-sizing: border-box;
     padding: var(--theme-spacing-6);
+    margin-bottom: calc(var(--theme-spacing-6) * 2);
     box-shadow: var(--theme-box-shadow);
     ">
     <p>--theme-box-shadow</p>
+</div>
+
+<div style="
+    width: 90%;
+    box-sizing: border-box;
+    padding: var(--theme-spacing-6);
+    margin-bottom: calc(var(--theme-spacing-6) * 2);
+    box-shadow: var(--theme-box-shadow-n);
+    ">
+    <p>--theme-box-shadow-n</p>
+</div>
+
+<div style="
+    width: 90%;
+    box-sizing: border-box;
+    padding: var(--theme-spacing-6);
+    margin-bottom: calc(var(--theme-spacing-6) * 2);
+    box-shadow: var(--theme-box-shadow-e);
+    ">
+    <p>--theme-box-shadow-e</p>
+</div>
+
+<div style="
+    width: 90%;
+    box-sizing: border-box;
+    padding: var(--theme-spacing-6);
+    margin-bottom: calc(var(--theme-spacing-6) * 2);
+    box-shadow: var(--theme-box-shadow-s);
+    ">
+    <p>--theme-box-shadow-s</p>
+</div>
+
+<div style="
+    width: 90%;
+    box-sizing: border-box;
+    padding: var(--theme-spacing-6);
+    margin-bottom: calc(var(--theme-spacing-6) * 2);
+    box-shadow: var(--theme-box-shadow-w);
+    ">
+    <p>--theme-box-shadow-w</p>
 </div>
 `;
     $themePicker.appendChild($div);
