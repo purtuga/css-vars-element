@@ -13,7 +13,7 @@ showcase({ name: "Listen: set-theme", group: GROUP_NAME}, function ($content) {
 </css-vars>
 `;
     const $a = $content.querySelector("a");
-    const $div = $content.querySelector("div");
+    // const $div = $content.querySelector("div");
 
     $a.addEventListener("click", function() {
         const newEv = new CustomEvent("set-theme", {detail: {}, bubbles: true});
