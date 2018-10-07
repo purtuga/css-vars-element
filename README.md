@@ -7,7 +7,7 @@ For a list of css variables available, see `src/index.js`
 #   Usage
 
 ```javascript
-import {CssVars} from "css-vars-element";
+import {CssVars} from "css-vars-element.ecm.min.js";
 
 CssVars.define();
 
@@ -23,6 +23,16 @@ document.querySelector("#ui").innerHTML = `
 `;
 
 ```
+
+# Distribution Bundles
+
+The `dist` folder contains the following built bundles:
+
+-   `css-vars-element.min.js`: A ES6 bundle version supporting UMD
+-   `css-vars-element.esm.min.js`: A ES6 Module
+-   `css-vars-element.import.min.js`: An ES6 bundles that auto registers the Element into the browser. 
+-   `css-vars-element.legacy.min.js`: An ES5 transpiled version supporting UMD
+-   
 
 # License
 
