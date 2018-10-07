@@ -2,7 +2,12 @@
 
 A Custom Element that sets a series of CSS Variables that child components can use to style themselves.  The goal of this element is to allow for the creation of widgets (custom elements) that are free from framework specific implementations by allow them to pull in common values from these variables. The element can then serve as the "proxy" between different types of CSS frameworks and the components that base themselves on this element. 
 
-For a list of css variables available, see `src/index.js`
+## Showcase
+Go here to see a showcase of the CSS Vars that are made available:
+
+https://codepen.io/purtuga/full/ReowqX
+
+Or, view the [vard-default.js](srs/vars-default.js) file.
 
 #   Usage
 
