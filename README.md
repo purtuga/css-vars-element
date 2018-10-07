@@ -7,7 +7,7 @@ Go here to see a showcase of the CSS Vars that are made available:
 
 https://codepen.io/purtuga/full/ReowqX
 
-Or, view the [vard-default.js](srs/vars-default.js) file.
+Or, view the [vars-default.js](srs/vars-default.js) file.
 
 #   Usage
 
