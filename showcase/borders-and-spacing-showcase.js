@@ -1,7 +1,8 @@
-import {showcase} from "project-showcase"
+import {showcase} from "project-showcase";
+import {menuGroupTitles} from "./common";
 
 
-showcase("Borders and Spacing", function($content) {
+showcase({ name: "Borders and Spacing", group: menuGroupTitles.vars }, function($content) {
     const $themePicker = document.createElement("css-vars");
     $themePicker.setAttribute("style", "display:grid; grid:auto / repeat(4, 1fr);grid-gap:2em;");
     $content.appendChild($themePicker);

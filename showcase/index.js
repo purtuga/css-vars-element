@@ -3,6 +3,7 @@ import "./colors-showcase"
 import "./events-showcase"
 import "./font-showcase"
 import "./borders-and-spacing-showcase"
+import "./theme-editor"
 
 // import other showcases now so that they register themselves.
 

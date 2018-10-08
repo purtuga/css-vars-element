@@ -1,11 +1,11 @@
 import {showcase} from "project-showcase"
+import {menuGroupTitles} from "./common";
 
 // import other showcases now so that they register themselves.
 
 //========================================================
-const GROUP_NAME = "Events";
 
-showcase({ name: "Listen: set-theme", group: GROUP_NAME}, function ($content) {
+showcase({ name: "Listen: set-theme", group: menuGroupTitles.events }, function ($content) {
     $content.innerHTML = `
 <css-vars>
     <a href="javascript:void(0);">Emit</a>

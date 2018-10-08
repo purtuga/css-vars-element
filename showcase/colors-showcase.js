@@ -1,4 +1,5 @@
-import {showcase} from "project-showcase"
+import {showcase} from "project-showcase";
+import {menuGroupTitles} from "./common";
 
 // import other showcases now so that they register themselves.
 
@@ -6,7 +7,7 @@ import {showcase} from "project-showcase"
 const getColorHtml = cssVarName => `<span style="border:1px solid lightgrey;display:inline-block;width:20px;height:20px;vertical-align:middle;background: var(${cssVarName})"></span><code>${cssVarName}</code>`;
 
 
-showcase("Base Colors", function ($content) {
+showcase({ name: "Base Colors", group: menuGroupTitles.vars }, function ($content) {
     const $themePicker = document.createElement("css-vars");
     $themePicker.setAttribute("style", "display:grid; grid:auto / repeat(4, 1fr);grid-gap:2em;");
     $content.appendChild($themePicker);
@@ -14,6 +15,24 @@ showcase("Base Colors", function ($content) {
     const allThemCssVars = $themePicker.getVarNames();
     let $div;
     let isMatch;
+
+    // General Colors --------------------------------------------------------
+    $div = document.createElement("div");
+    $div.innerHTML = `
+<h3>General Purpose Colors</h3>
+<p>${getColorHtml("--theme-color-bg")}</p>
+<p>${getColorHtml("--theme-color-fg")}</p>
+<p>${getColorHtml("--theme-color-link")}</p>
+<hr>
+<p style="
+        background: var(--theme-color-bg);
+        color:      var(--theme-color-fg)
+    ">Paragraph text here</p>
+<p><a href="javascript:void(0);" style="color:var(--theme-color-link)">Lorem ipsum</a></p>
+`;
+    $themePicker.appendChild($div);
+    $div = null;
+
 
     // Colors  ----------------------------------------------------------------
     $div = document.createElement("div");
@@ -101,25 +120,11 @@ showcase("Base Colors", function ($content) {
     $themePicker.appendChild($div);
     $div = null;
 
-
-    // ELEMENTS colors    -----------------------------------------------------
-    $div = document.createElement("div");
-    $div.innerHTML = `
-<p>${getColorHtml("--theme-color-bg")}</p>
-<p>${getColorHtml("--theme-color-fg")}</p>
-<p>${getColorHtml("--theme-color-link")}</p>
-<hr>
-<p style="background:var(--theme-color-bg);color:var(--theme-color-fg)">Lerem ipsum</p>
-<p><a href="javascript:void(0);" style="color:var(--theme-color-link)">Lorem ipsum</a></p>
-`;
-    $themePicker.appendChild($div);
-    $div = null;
-
 });
 
 
 
-showcase("Colored Messages", function ($content){
+showcase({ name: "Colored Messages", group: menuGroupTitles.vars }, function ($content){
     const $themePicker = document.createElement("css-vars");
     $themePicker.setAttribute("style", "display:grid; grid:auto / repeat(4, 1fr);grid-gap:2em;");
     $content.appendChild($themePicker);

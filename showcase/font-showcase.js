@@ -1,7 +1,7 @@
 import {showcase} from "project-showcase"
+import {menuGroupTitles} from "./common";
 
-
-showcase("Fonts", function($content) {
+showcase({ name: "Fonts", group: menuGroupTitles.vars }, function($content) {
     const $themePicker = document.createElement("css-vars");
     $themePicker.setAttribute("style", "display:grid; grid:auto / repeat(4, 1fr);grid-gap:2em;");
     $content.appendChild($themePicker);

@@ -38,7 +38,7 @@ The `dist` folder contains the following built bundles:
 -   `css-vars-element.import.min.js`: An ES6 bundles that auto registers the Element into the browser. 
 -   `css-vars-element.import.legacy.min.js`: An ES5 transpiled bundle that auto registers the Element into the browser. 
 -   `css-vars-element.legacy.min.js`: An ES5 transpiled bundle supporting UMD
--   
+
 
 # License
 
