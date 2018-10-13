@@ -37,7 +37,7 @@ showcase({ name: "Base Colors", group: menuGroupTitles.vars }, function ($conten
     // Colors  ----------------------------------------------------------------
     $div = document.createElement("div");
     $div.innerHTML = `<h3>Primary Colors</h3>`;
-    isMatch = /-color-\d+/
+    isMatch = /-color-\d+/;
     allThemCssVars.forEach(cssVarName => {
         if (isMatch.test(cssVarName)) {
             const $p = document.createElement("p");
@@ -52,7 +52,7 @@ showcase({ name: "Base Colors", group: menuGroupTitles.vars }, function ($conten
     // Colors - accent: info---------------------------------------------------
     $div = document.createElement("div");
     $div.innerHTML = `<h3>Secondary: Accent - Info</h3>`;
-    isMatch = /-color-accent-info-\d+/
+    isMatch = /-color-accent-info-\d+/;
     allThemCssVars.forEach(cssVarName => {
         if (isMatch.test(cssVarName)) {
             const $p = document.createElement("p");
@@ -66,7 +66,7 @@ showcase({ name: "Base Colors", group: menuGroupTitles.vars }, function ($conten
     // Colors - accent: success ----------------------------------------------
     $div = document.createElement("div");
     $div.innerHTML = `<h3>Secondary: Accent - Success</h3>`;
-    isMatch = /-color-accent-success-\d+/
+    isMatch = /-color-accent-success-\d+/;
     allThemCssVars.forEach(cssVarName => {
         if (isMatch.test(cssVarName)) {
             const $p = document.createElement("p");
@@ -80,7 +80,7 @@ showcase({ name: "Base Colors", group: menuGroupTitles.vars }, function ($conten
     // Colors - accent: warning ----------------------------------------------
     $div = document.createElement("div");
     $div.innerHTML = `<h3>Secondary: Accent - Alert</h3>`;
-    isMatch = /-color-accent-alert-\d+/
+    isMatch = /-color-accent-alert-\d+/;
     allThemCssVars.forEach(cssVarName => {
         if (isMatch.test(cssVarName)) {
             const $p = document.createElement("p");
@@ -94,7 +94,7 @@ showcase({ name: "Base Colors", group: menuGroupTitles.vars }, function ($conten
     // Colors - accent: warning ----------------------------------------------
     $div = document.createElement("div");
     $div.innerHTML = `<h3>Secondary: Accent - Warning</h3>`;
-    isMatch = /-color-accent-warning-\d+/
+    isMatch = /-color-accent-warning-\d+/;
     allThemCssVars.forEach(cssVarName => {
         if (isMatch.test(cssVarName)) {
             const $p = document.createElement("p");
@@ -109,7 +109,7 @@ showcase({ name: "Base Colors", group: menuGroupTitles.vars }, function ($conten
     // Colors - accent: Error ----------------------------------------------
     $div = document.createElement("div");
     $div.innerHTML = `<h3>Secondary: Accent - error</h3>`;
-    isMatch = /-color-accent-error-\d+/
+    isMatch = /-color-accent-error-\d+/;
     allThemCssVars.forEach(cssVarName => {
         if (isMatch.test(cssVarName)) {
             const $p = document.createElement("p");

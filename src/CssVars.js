@@ -24,6 +24,15 @@ export class CssVars extends ComponentElement {
         return "css-vars";
     }
 
+    /**
+     * Returns an array with all the css var names
+     *
+     * @type {Array}
+     */
+    static get varNames() {
+        return CSS_VAR_LIST.slice(0);
+    }
+
     static get template() {
         return `
 <style>
@@ -158,7 +167,7 @@ ${this.props.target} {
      * @returns {Array}
      */
     getVarNames() {
-        return CSS_VAR_LIST.slice(0);
+        return this.constructor.varNames;
     }
 }
 
