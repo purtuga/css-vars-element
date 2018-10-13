@@ -3,7 +3,7 @@
     All colors are normally defined starting with the lightest one
 */
 
-export const varsDefault = {
+export const varsDefault = Object.freeze({
     //---------------------------------------------------------------
     //                                                  COLORS
     //---------------------------------------------------------------
@@ -134,4 +134,4 @@ export const varsDefault = {
     "--theme-box-shadow-e": "8px 0 10px 1px rgba(0,0,0,0.14), 0 3px 14px 2px rgba(0,0,0,0.12), 0 5px 5px -3px rgba(0,0,0,0.2)",
     "--theme-box-shadow-s": "var(--theme-box-shadow)",
     "--theme-box-shadow-w": "-8px 0 10px 1px rgba(0,0,0,0.14), 0 3px 14px 2px rgba(0,0,0,0.12), 0 5px 5px -3px rgba(0,0,0,0.2)"
-};
+});

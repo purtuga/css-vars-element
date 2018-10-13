@@ -1,7 +1,11 @@
 import {ComponentElement} from "component-element"
 import {functionBindCall} from "common-micro-libs/src/jsutils/runtime-aliases"
+import {xmlEscape} from "common-micro-libs/src/jsutils/xmlEscape"
+import {TabStrip} from "../showcase/components/TabStrip";
 
 //=============================================================
+TabStrip.define();
+
 const appendChild = functionBindCall(HTMLElement.prototype.appendChild);
 const getNewDocFragment = () => document.createDocumentFragment();
 const getHeader = title => {
@@ -9,15 +13,25 @@ const getHeader = title => {
     header.textContent = title;
     return header;
 };
+const getSection = (title, id) => {
+    const section = document.createElement("section");
+    if (id) {
+        section.setAttribute("id", id);
+    }
+    if (title) {
+        appendChild(section, getHeader(title));
+    }
+    return section;
+};
 const getField = (name = "", value = "", isColor = "") => {
     const response = document.createElement("p");
     response.innerHTML = `
 <label>${name}</label>
 <div>
-    <input type="${ isColor ? "color" : "text"}" name="${name}" value="${value}" />
+    <input type="${ isColor ? "color" : "text"}" name="${xmlEscape.escape(name)}" value="${xmlEscape.escape(value)}" />
 ${
     isColor
-        ? `<input type="text" name="${name}" value="${value}" />`
+        ? `<input type="text" name="${xmlEscape.escape(name)}" value="${xmlEscape.escape(value)}" />`
         : ""
 }
 </div>`;
@@ -49,6 +63,7 @@ export class ThemeEditor extends ComponentElement {
         box-sizing: border-box;
     }
     * {
+        font-family: var(--theme-font-family, verdana);
         box-sizing: border-box;
     }
     .container {
@@ -61,10 +76,81 @@ export class ThemeEditor extends ComponentElement {
         width: 69.4%;
         margin-left: 0.5%;
     }
+    input {
+        width: 100%;
+        padding: 0.2em;
+    }
+    tab-strip {
+        padding-bottom: 1em;
+    }
+    [tab] {
+        border: 1px solid #bee1f4;
+        border-radius: 50%;
+        width: 1.5em;
+        height: 1.5em;
+        line-height: 1.5em;
+        padding: 0;
+        text-align: center;
+    }
+    [tab]:hover {
+        border-color: #0078d7;
+    }
+    [tab][selected] {
+        background-color: #0078d7;
+        color: beige;
+    }
+    
+    #vars > * {
+        display: none;
+    }
+    #vars[show="general"] > #general,
+    #vars[show="primary"] > #primary,
+    #vars[show="secondary"] > #secondary,
+    #vars[show="messages"] > #messages, 
+    #vars[show="fonts"] > #fonts,
+    #vars[show="borders"] > #borders {
+        display: block;
+    }
+    
+    .download-actions {
+        text-align: right;
+        position: relative;
+    }
+    .download-content {
+        display: none;
+        position: absolute;
+        right: 0;
+        top: calc(100% + 5px);
+        width: 100%;
+    }
+    .download-content .textarea-cntr {
+        height: 400px;
+        width: 100%;
+    }
+    .download-content .close-download-content {
+        display: inline-block;
+        cursor: pointer;
+        margin-bottom: var(--theme-spacing-3);
+    }
+    .download-content textarea {
+        display: block;
+        width: 100%;
+        height: 100%;
+        resize: none;
+        border: none;
+    }
 </style>
 <div class="container">
     <div class="vars">
         <h1>Theme CSS Vars</h1>
+        <tab-strip>
+            <div tab title="General Colors" selected show="general">G</div>
+            <div tab title="Primary Colors" show="primary">P</div>
+            <div tab title="Secondary Colors" show="secondary">S</div>
+            <div tab title="Messages" show="messages">M</div>
+            <div tab title="Fonts" show="fonts">F</div>
+            <div tab title="Borders and Spacing" show="borders">B</div>
+        </tab-strip>
         <div id="vars"></div>
     </div>
     <div class="preview">
@@ -79,6 +165,24 @@ export class ThemeEditor extends ComponentElement {
                     border-color:       var(--theme-color-2);
                     box-shadow:         var(--theme-box-shadow);
                 ">
+                <div class="download-actions">
+                    <button name="download-json">JSON</button>
+                    <button name="download-css">CSS</button>
+                    <div class="download-content" style="
+                            background-color: var(--theme-color-bg);
+                            border: var(--theme-border);
+                            border-color: var(--theme-color-2);
+                            padding: var(--theme-spacing-5);
+                            box-shadow: var(--theme-box-shadow);
+                        ">
+                        <a class="close-download-content" style="color: var(--theme-color-link)">close</a>
+                        <div class="textarea-cntr">
+                            <textarea style="
+                                font-family: var(--theme-font-family-monospace);
+                                "></textarea>
+                        </div>
+                    </div>
+                </div>
                 <h1>Preview</h1>
                 
                 <p>
@@ -169,53 +273,75 @@ export class ThemeEditor extends ComponentElement {
     //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~  PROPS AND ATTRIBUTES  ~~~~
 
 
+
     //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~  LIFE CYCLE HOOKS  ~~~~~
     // Called from constructor
-    // init() {}
+    init() {
+        this._state = {
+            show: "general",
+            $varsCntr: null,
+            $cssVarsEle: null,
+            $downloadContent: null,
+            $downloadSrc: null
+        }
+    }
 
     // Called when all required `props` have been provided
     ready() {
         if (!this._setupDone) {
             this._setupDone = true;
+            this._state.$downloadContent = this.$(".download-content");
+            this._state.$downloadSrc = this._state.$downloadContent.querySelector("textarea");
 
             customElements.whenDefined("css-vars").then(() => {
-                const varsCntr = this.$("#vars");
+                const varsCntr = this._state.$varsCntr = this.$("#vars");
                 const varNames = customElements.get("css-vars").varNames;
-                const cssVarsEle = this.$("css-vars");
-                let initialStyles = getComputedStyle(cssVarsEle);
+                const cssVarsEle = this._state.$cssVarsEle =  this.$("css-vars");
+                let initialStyles = cssVarsEle.constructor.defaultVars;
                 const reduceToColorFieldsDocFrag = (content, varName) => {
-                    content.appendChild(getField(varName, initialStyles.getPropertyValue(varName).trim(), true));
+                    content.appendChild(getField(varName, initialStyles[varName].trim(), true));
                     return content;
                 };
+                const reduceToInputFieldsDocFrag = (content, varName) => {
+                    content.appendChild(getField(varName, initialStyles[varName].trim()));
+                    return content;
+                };
+                let section;
                 let isMatch;
 
                 // General Colors
-                appendChild(varsCntr, getHeader("General Colors"));
+                section = getSection("General Colors", "general");
                 appendChild(
-                    varsCntr,
+                    section,
                     [
                         "--theme-color-bg",
                         "--theme-color-fg",
                         "--theme-color-link"
                     ].reduce(reduceToColorFieldsDocFrag, getNewDocFragment())
                 );
+                appendChild(varsCntr, section);
+                section = null;
+
 
                 // Primary Colors
                 isMatch = /-color-\d+/;
-                appendChild(varsCntr, getHeader("Primary Colors"));
+                section = getSection("Primary Colors", "primary");
                 appendChild(
-                    varsCntr,
+                    section,
                     varNames
                         .filter(varName => isMatch.test(varName))
                         .reduce(reduceToColorFieldsDocFrag, getNewDocFragment())
                 );
+                appendChild(varsCntr, section);
+                section = null;
                 isMatch = null;
 
                 // Accent Colors: INFO
+                section = getSection("", "secondary");
                 isMatch = /-color-accent-info-\d+/;
-                appendChild(varsCntr, getHeader("Secondary: Accent Info"));
+                appendChild(section, getHeader("Secondary: Accent Info"));
                 appendChild(
-                    varsCntr,
+                    section,
                     varNames
                         .filter(varName => isMatch.test(varName))
                         .reduce(reduceToColorFieldsDocFrag, getNewDocFragment())
@@ -224,9 +350,9 @@ export class ThemeEditor extends ComponentElement {
 
                 // Accent Colors: SUCCESS
                 isMatch = /-color-accent-success-\d+/;
-                appendChild(varsCntr, getHeader("Secondary: Accent Success"));
+                appendChild(section, getHeader("Secondary: Accent Success"));
                 appendChild(
-                    varsCntr,
+                    section,
                     varNames
                         .filter(varName => isMatch.test(varName))
                         .reduce(reduceToColorFieldsDocFrag, getNewDocFragment())
@@ -235,9 +361,9 @@ export class ThemeEditor extends ComponentElement {
 
                 // Accent Colors: ALERT
                 isMatch = /-color-accent-alert-\d+/;
-                appendChild(varsCntr, getHeader("Secondary: Accent Alert"));
+                appendChild(section, getHeader("Secondary: Accent Alert"));
                 appendChild(
-                    varsCntr,
+                    section,
                     varNames
                         .filter(varName => isMatch.test(varName))
                         .reduce(reduceToColorFieldsDocFrag, getNewDocFragment())
@@ -246,9 +372,9 @@ export class ThemeEditor extends ComponentElement {
 
                 // Accent Colors: WARNING
                 isMatch = /-color-accent-warning-\d+/;
-                appendChild(varsCntr, getHeader("Secondary: Accent Warning"));
+                appendChild(section, getHeader("Secondary: Accent Warning"));
                 appendChild(
-                    varsCntr,
+                    section,
                     varNames
                         .filter(varName => isMatch.test(varName))
                         .reduce(reduceToColorFieldsDocFrag, getNewDocFragment())
@@ -257,20 +383,24 @@ export class ThemeEditor extends ComponentElement {
 
                 // Accent Colors: ERROR
                 isMatch = /-color-accent-error-\d+/;
-                appendChild(varsCntr, getHeader("Secondary: Accent Error"));
+                appendChild(section, getHeader("Secondary: Accent Error"));
                 appendChild(
-                    varsCntr,
+                    section,
                     varNames
                         .filter(varName => isMatch.test(varName))
                         .reduce(reduceToColorFieldsDocFrag, getNewDocFragment())
                 );
                 isMatch = null;
+                appendChild(varsCntr, section);
+                section = null;
+                isMatch = null;
 
 
                 // Messages: Success
-                appendChild(varsCntr, getHeader("Colored Messages: Success"));
+                section = getSection("", "messages");
+                appendChild(section, getHeader("Colored Messages: Success"));
                 appendChild(
-                    varsCntr,
+                    section,
                     [
                         "--theme-color-msg-success-bg",
                         "--theme-color-msg-success-fg"
@@ -278,9 +408,9 @@ export class ThemeEditor extends ComponentElement {
                 );
 
                 // Messages: Alert
-                appendChild(varsCntr, getHeader("Colored Messages: Alert"));
+                appendChild(section, getHeader("Colored Messages: Alert"));
                 appendChild(
-                    varsCntr,
+                    section,
                     [
                         "--theme-color-msg-alert-bg",
                         "--theme-color-msg-alert-fg"
@@ -288,9 +418,9 @@ export class ThemeEditor extends ComponentElement {
                 );
 
                 // Messages: Warning
-                appendChild(varsCntr, getHeader("Colored Messages: Warning"));
+                appendChild(section, getHeader("Colored Messages: Warning"));
                 appendChild(
-                    varsCntr,
+                    section,
                     [
                         "--theme-color-msg-warning-bg",
                         "--theme-color-msg-warning-fg"
@@ -298,9 +428,9 @@ export class ThemeEditor extends ComponentElement {
                 );
 
                 // Messages: Info
-                appendChild(varsCntr, getHeader("Colored Messages: Info"));
+                appendChild(section, getHeader("Colored Messages: Info"));
                 appendChild(
-                    varsCntr,
+                    section,
                     [
                         "--theme-color-msg-info-bg",
                         "--theme-color-msg-info-fg"
@@ -308,31 +438,104 @@ export class ThemeEditor extends ComponentElement {
                 );
 
                 // Messages: Error
-                appendChild(varsCntr, getHeader("Colored Messages: Error"));
+                appendChild(section, getHeader("Colored Messages: Error"));
                 appendChild(
-                    varsCntr,
+                    section,
                     [
                         "--theme-color-msg-error-bg",
                         "--theme-color-msg-error-fg"
                     ].reduce(reduceToColorFieldsDocFrag, getNewDocFragment())
                 );
+                appendChild(varsCntr, section);
+                section = null;
+
+                // Fonts
+                isMatch = /-font-/;
+                section = getSection("Fonts", "fonts");
+                appendChild(
+                    section,
+                    varNames
+                        .filter(varName => isMatch.test(varName))
+                        .reduce(reduceToInputFieldsDocFrag, getNewDocFragment())
+                );
+                appendChild(varsCntr, section);
+                section = null;
+                isMatch = null;
+
 
                 // Borders and spacing
+                isMatch = /-font-/;
+                section = getSection("Boarders and Spacing", "borders");
+                appendChild(
+                    section,
+                    varNames
+                        .filter(varName => isMatch.test(varName))
+                        .reduce(reduceToInputFieldsDocFrag, getNewDocFragment())
+                );
+
+                isMatch = /-spacing-/;
+                appendChild(section, getHeader("Spacing"));
+                appendChild(
+                    section,
+                    varNames
+                        .filter(varName => isMatch.test(varName))
+                        .reduce(reduceToInputFieldsDocFrag, getNewDocFragment())
+                );
+
+                isMatch = /-box-shadow/;
+                appendChild(section, getHeader("Box Shadow"));
+                appendChild(
+                    section,
+                    varNames
+                        .filter(varName => isMatch.test(varName))
+                        .reduce(reduceToInputFieldsDocFrag, getNewDocFragment())
+                );
+
+                appendChild(varsCntr, section);
+                section = null;
+                isMatch = null;
 
 
-
-                varsCntr.addEventListener("input", ev => {
-                    if (ev.target.type === "text" || ev.target.type === "color") {
-                        if (ev.target.type === "color") {
-                            ev.target.parentElement.querySelector("input[type='text']").value = ev.target.value;
-                        }
-
-                        cssVarsEle.style.setProperty(ev.target.name, ev.target.value);
-                    }
-                });
+                varsCntr.addEventListener("input", this);
+                this.$("tab-strip").addEventListener("click", this);
+                varsCntr.setAttribute("show", this._state.show);
+                this.$(".download-actions").addEventListener("click", this);
+                this.$(".close-download-content").addEventListener("click", this);
 
                 initialStyles = null;
             });
+        }
+    }
+
+    handleEvent(ev) {
+        if (ev.target.type === "text" || ev.target.type === "color") {
+            if (ev.target.type === "color") {
+                ev.target.parentElement.querySelector("input[type='text']").value = ev.target.value;
+            }
+
+            this._state.$cssVarsEle.style.setProperty(ev.target.name, ev.target.value);
+        }
+
+        if (ev.type === "click" && ev.currentTarget.tagName === "TAB-STRIP") {
+            const selectedEle = ev.target.closest("[tab]");
+            if (selectedEle && !selectedEle.hasAttribute("selected")) {
+                const previouslySelected = ev.currentTarget.querySelector("[selected]");
+                if (previouslySelected) {
+                    previouslySelected.removeAttribute("selected");
+                }
+                selectedEle.setAttribute("selected", "");
+                this._state.$varsCntr.setAttribute("show", selectedEle.getAttribute("show"));
+            }
+        }
+
+        if (ev.type === "click" && (ev.target.name === "download-json" || ev.target.name === "download-css")) {
+            const content = getDownloadContent(this, ev.target.name === "download-json" ? "json" : "text");
+            this._state.$downloadSrc.value = ev.target.name === "download-json" ? JSON.stringify(content, null, 4) : content;
+            this.showDownload();
+        }
+
+        if (ev.type === "click" && ev.target.classList.contains("close-download-content")) {
+            this.hideDownload();
         }
     }
 
@@ -349,6 +552,34 @@ export class ThemeEditor extends ComponentElement {
     //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
+    showDownload() {
+        this._state.$downloadContent.style.display = "block";
+    }
+
+    hideDownload() {
+        this._state.$downloadContent.style.display = "none";
+    }
+}
+
+function getDownloadContent(inst, type = "json") {
+    const asJson = type === "json";
+    let content = asJson ? {} : "";
+
+    inst.$$("input[type='text']").forEach(input => {
+        if (asJson) {
+            content[input.name] = input.value;
+        } else {
+            content += `    ${input.name}: ${input.value};${"\n"}`
+        }
+    });
+
+    if (!asJson) {
+        content = `:root {
+${content}
+}`;
+    }
+
+    return content;
 }
 
 export default ThemeEditor;

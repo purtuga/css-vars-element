@@ -25,6 +25,15 @@ export class CssVars extends ComponentElement {
     }
 
     /**
+     * Returns an object with the default variables and associated values
+     *
+     * @returns {Object}
+     */
+    static get defaultVars() {
+        return varsDefault;
+    }
+
+    /**
      * Returns an array with all the css var names
      *
      * @type {Array}
@@ -46,7 +55,9 @@ export class CssVars extends ComponentElement {
     }
 
     /**
-     * The set of props that should be set to the Element.
+     * The set of props that should be set to the Element. Use this to set custom set of
+     * var, thus enabling the creation of different themes.
+     *
      * @property
      * @type {Object}
      */
@@ -73,7 +84,7 @@ export class CssVars extends ComponentElement {
      * @type {String}
      * @example
      *
-     * <css-vars to":root"></css-vars>
+     * <css-vars target":root"></css-vars>
      */
     @prop({attr: true})
     get target() { return null; }
