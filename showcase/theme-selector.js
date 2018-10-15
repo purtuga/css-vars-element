@@ -22,7 +22,11 @@ showcase({ name: "Theme Selector", group: menuGroupTitles.other}, function ($con
 <theme-selector id="three"></theme-selector>
 
 <css-vars>
-    <div style="background-color: var(--theme-color-bg); color: var(--theme-color-fg); padding: var(--theme-spacing-8) var(--theme-spacing-3);">
+    <div style="
+            background-color: var(--theme-color-bg); 
+            color: var(--theme-color-fg); 
+            padding: var(--theme-spacing-8) var(--theme-spacing-3);
+        ">
         <h2>Inside of a <code>css-vars</code> Element - With Choices</h2>
         <theme-selector id="four"></theme-selector>
     </div>

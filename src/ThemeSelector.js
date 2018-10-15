@@ -7,6 +7,8 @@ const warn = console.warn; // eslint-disable-line
 const LABELS = {
     none: "None"
 };
+// const CLEAR = "&#10761;";
+// const ARROW = "&#9660;";
 
 /**
  * Provides a selection type of interface that allows the user to select a theme
@@ -284,7 +286,7 @@ function getChoiceElementForTheme(theme, themeId) {
     const themeShowcase = parseHTML(`
 <div class="theme" data-theme="${String(themeId) || theme.title}">
     <css-vars>
-        <div style="padding: 0.5em;background-color: var(--theme-color-bg); color: var(--theme-color-fg);">
+        <div style="padding: 0.5em;background-color: var(--theme-color-bg); color: var(--theme-color-fg); font-family: var(--theme-font-family);">
             <div>${ theme.title || "??"}</div>
             <div class="theme-colors">
                 <div style="background-color: var(--theme-color-msg-success-bg);"></div>

@@ -158,7 +158,9 @@ ${this.props.target} {
      * (essentially: clears out props.vars object)
      */
     clear() {
-        clearCustomVars(this, this.props.vars);
+        if (this.props.vars) {
+            clearCustomVars(this, this.props.vars);
+        }
         this.props.vars = {};
     }
 

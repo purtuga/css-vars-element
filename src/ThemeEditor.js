@@ -1,5 +1,5 @@
 import {ComponentElement} from "component-element"
-import {functionBindCall} from "common-micro-libs/src/jsutils/runtime-aliases"
+import {functionBindCall, consoleError} from "common-micro-libs/src/jsutils/runtime-aliases"
 import {xmlEscape} from "common-micro-libs/src/jsutils/xmlEscape"
 import {TabStrip} from "../showcase/components/TabStrip";
 
@@ -135,17 +135,50 @@ export class ThemeEditor extends ComponentElement {
         height: 400px;
         width: 100%;
     }
-    .download-content .close-download-content {
+    .download-content .close-download-content,
+    .close-upload-content {
         display: inline-block;
         cursor: pointer;
         margin-bottom: var(--theme-spacing-3);
     }
-    .download-content textarea {
+    .download-content textarea,
+    .upload-content textarea {
         display: block;
         width: 100%;
         height: 100%;
         resize: none;
         border: none;
+    }
+    .upload-button-cntr {
+        display: inline-block;
+        position: relative;
+        margin-right: 3em;
+    }
+    button[name="load-json"],
+    .upload-actions > button{
+        background-color: var(--theme-color-1);
+        border-color: var(--theme-color-2);
+        color: var(--theme-color-5);
+    }
+    .upload-content {
+        display: none;
+        position: absolute;
+        right: -2px;
+        top: -2px;
+        width: 400px;
+    }
+    .upload-content .textarea-cntr {
+        height: 140px;
+    }
+    .upload-content textarea {
+        border: var(--theme-border);
+    }
+    .upload-content .upload-actions {
+        margin-top: 0.5em;
+    }
+    .upload-actions > button[name="load-theme-vars"] {
+        border-color: var(--theme-color-6);
+        color: var(--theme-color-8);
     }
 </style>
 <div class="container">
@@ -174,6 +207,26 @@ export class ThemeEditor extends ComponentElement {
                     box-shadow:         var(--theme-box-shadow);
                 ">
                 <div class="download-actions">
+                    <span class="upload-button-cntr">
+                        <button name="load-json">Load</button>
+                        <div class="upload-content" style="
+                                background-color: var(--theme-color-bg);
+                                border: var(--theme-border);
+                                border-color: var(--theme-color-2);
+                                padding: var(--theme-spacing-5);
+                                box-shadow: var(--theme-box-shadow);
+                            ">
+                            <a class="close-upload-content" style="color: var(--theme-color-link)">close</a>
+                            <div class="textarea-cntr">
+                                <textarea placeholder="Paste Theme JSON here" style="
+                                    font-family: var(--theme-font-family-monospace);
+                                    "></textarea>
+                            </div>
+                            <div class="upload-actions">
+                                <button name="load-theme-vars">Load Theme Vars</button>
+                            </div>
+                        </div>
+                    </span>
                     <button name="download-json">JSON</button>
                     <button name="download-css">CSS</button>
                     <div class="download-content" style="
@@ -290,7 +343,9 @@ export class ThemeEditor extends ComponentElement {
             $varsCntr: null,
             $cssVarsEle: null,
             $downloadContent: null,
-            $downloadSrc: null
+            $downloadSrc: null,
+            $uploadContent: null,
+            $uploadSrc: null
         }
     }
 
@@ -300,6 +355,8 @@ export class ThemeEditor extends ComponentElement {
             this._setupDone = true;
             this._state.$downloadContent = this.$(".download-content");
             this._state.$downloadSrc = this._state.$downloadContent.querySelector("textarea");
+            this._state.$uploadContent = this.$(".upload-content");
+            this._state.$uploadSrc = this._state.$uploadContent.querySelector("textarea");
 
             customElements.whenDefined("css-vars").then(() => {
                 const varsCntr = this._state.$varsCntr = this.$("#vars");
@@ -509,6 +566,7 @@ export class ThemeEditor extends ComponentElement {
                 varsCntr.setAttribute("show", this._state.show);
                 this.$(".download-actions").addEventListener("click", this);
                 this.$(".close-download-content").addEventListener("click", this);
+                this.$(".close-upload-content").addEventListener("click", this);
 
                 initialStyles = null;
             });
@@ -536,10 +594,33 @@ export class ThemeEditor extends ComponentElement {
             }
         }
 
-        if (ev.type === "click" && (ev.target.name === "download-json" || ev.target.name === "download-css")) {
+        if (
+            ev.type === "click" &&
+            (
+                ev.target.name === "download-json" ||
+                ev.target.name === "download-css"
+            )
+        ) {
             const content = getDownloadContent(this, ev.target.name === "download-json" ? "json" : "text");
             this._state.$downloadSrc.value = ev.target.name === "download-json" ? JSON.stringify(content, null, 4) : content;
             this.showDownload();
+        }
+
+        if (ev.type === "click" && ev.target.name === "load-json") {
+            this.showUpload();
+        }
+
+        if (
+            ev.type === "click" &&
+            (
+                ev.target.name === "load-theme-vars" ||
+                ev.target.classList.contains("close-upload-content")
+            )
+        ) {
+            if (ev.target.name === "load-theme-vars") {
+                setVarsFromJsonString(this, this._state.$uploadSrc.value);
+            }
+            this.hideUpload();
         }
 
         if (ev.type === "click" && ev.target.classList.contains("close-download-content")) {
@@ -559,6 +640,13 @@ export class ThemeEditor extends ComponentElement {
 
     //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+    showUpload() {
+        this._state.$uploadContent.style.display = "block";
+    }
+
+    hideUpload() {
+        this._state.$uploadContent.style.display = "none";
+    }
 
     showDownload() {
         this._state.$downloadContent.style.display = "block";
@@ -567,6 +655,27 @@ export class ThemeEditor extends ComponentElement {
     hideDownload() {
         this._state.$downloadContent.style.display = "none";
     }
+}
+
+function setVarsFromJsonString(inst, jsonString) {
+    let themeVars;
+    try {
+        themeVars = JSON.parse(jsonString);
+    } catch(error) {
+        consoleError(error);
+        return;
+    }
+    inst.$$("input[type='text']").forEach(input => {
+        if (themeVars.hasOwnProperty(input.name)) {
+            input.value = themeVars[input.name];
+
+            if (input.previousSibling && input.previousSibling.type === "color") {
+                input.previousSibling.value = themeVars[input.name];
+            }
+
+            inst._state.$cssVarsEle.style.setProperty(input.name, input.value);
+        }
+    });
 }
 
 function getDownloadContent(inst, type = "json") {
