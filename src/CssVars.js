@@ -96,17 +96,7 @@ export class CssVars extends ComponentElement {
             $style: null
         };
 
-        /**
-         * Set a new list of CSS Vars to the element.
-         * The list of CSS Variables should be in the event's `details`.
-         *
-         * @event CssVars#set-vars
-         * @extends CustomEvent
-         * @type {CustomEvent}
-         *
-         * @property {Object} detail
-         */
-        this.on("set-vars", this);
+        this.on("themeChange", this);
 
         // When `vars` change - set vars that were provided
         this.onPropsChange(this._handleCustomVarsChange, "vars");
@@ -156,9 +146,9 @@ ${this.props.target} {
     }
 
     handleEvent(ev) {
-        if (ev.type === "set-vars" && ev.detail) {
+        if (ev.type === "themeChange" && ev.detail) {
             this.clear();
-            this.props.vars = ev.detail;
+            this.props.vars = ev.detail && ev.detail.theme ? ev.detail.theme : ev.detail;
         }
     }
 
@@ -204,7 +194,7 @@ function clearCustomVars(ele, vars, emit = true) {
     if (varsKeys.length) {
         varsKeys.forEach(cssPropName => ele.style.removeProperty(cssPropName));
         if (emit && ele.emit) {
-            this.emit("change", null, {bubble: true});
+            ele.emit("change", null, {bubble: true});
         }
     }
 }

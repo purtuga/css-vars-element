@@ -4,6 +4,7 @@ import "./events-showcase"
 import "./font-showcase"
 import "./borders-and-spacing-showcase"
 import "./theme-editor"
+import "./theme-selector"
 
 // import other showcases now so that they register themselves.
 

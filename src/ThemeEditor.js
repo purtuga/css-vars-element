@@ -4,7 +4,7 @@ import {xmlEscape} from "common-micro-libs/src/jsutils/xmlEscape"
 import {TabStrip} from "../showcase/components/TabStrip";
 
 //=============================================================
-TabStrip.define();
+TabStrip.define("theme-tab-strip");
 
 const appendChild = functionBindCall(HTMLElement.prototype.appendChild);
 const getNewDocFragment = () => document.createDocumentFragment();
@@ -80,7 +80,7 @@ export class ThemeEditor extends ComponentElement {
         width: 100%;
         padding: 0.2em;
     }
-    tab-strip {
+    theme-tab-strip {
         padding-bottom: 1em;
     }
     [tab] {
@@ -116,6 +116,14 @@ export class ThemeEditor extends ComponentElement {
         text-align: right;
         position: relative;
     }
+    .download-actions button {
+        cursor: pointer;
+        border: var(--theme-border);
+        background-color: var(--theme-color-accent-success-4);
+        color: var(--theme-color-accent-alert-0);
+        padding: var(--theme-spacing-1) var(--theme-spacing-3);
+        border-radius: var(--theme-border-radius);
+    }
     .download-content {
         display: none;
         position: absolute;
@@ -143,14 +151,14 @@ export class ThemeEditor extends ComponentElement {
 <div class="container">
     <div class="vars">
         <h1>Theme CSS Vars</h1>
-        <tab-strip>
+        <theme-tab-strip>
             <div tab title="General Colors" selected show="general">G</div>
             <div tab title="Primary Colors" show="primary">P</div>
             <div tab title="Secondary Colors" show="secondary">S</div>
             <div tab title="Messages" show="messages">M</div>
             <div tab title="Fonts" show="fonts">F</div>
             <div tab title="Borders and Spacing" show="borders">B</div>
-        </tab-strip>
+        </theme-tab-strip>
         <div id="vars"></div>
     </div>
     <div class="preview">
@@ -497,7 +505,7 @@ export class ThemeEditor extends ComponentElement {
 
 
                 varsCntr.addEventListener("input", this);
-                this.$("tab-strip").addEventListener("click", this);
+                this.$("theme-tab-strip").addEventListener("click", this);
                 varsCntr.setAttribute("show", this._state.show);
                 this.$(".download-actions").addEventListener("click", this);
                 this.$(".close-download-content").addEventListener("click", this);
@@ -516,7 +524,7 @@ export class ThemeEditor extends ComponentElement {
             this._state.$cssVarsEle.style.setProperty(ev.target.name, ev.target.value);
         }
 
-        if (ev.type === "click" && ev.currentTarget.tagName === "TAB-STRIP") {
+        if (ev.type === "click" && ev.currentTarget.tagName === "THEME-TAB-STRIP") {
             const selectedEle = ev.target.closest("[tab]");
             if (selectedEle && !selectedEle.hasAttribute("selected")) {
                 const previouslySelected = ev.currentTarget.querySelector("[selected]");
