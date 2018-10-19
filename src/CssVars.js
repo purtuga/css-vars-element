@@ -1,16 +1,27 @@
 import {ComponentElement, prop, bind, STATE_SYMBOL} from "component-element"
 import {domFind} from "common-micro-libs/src/domutils/domFind"
-import {objectKeys} from "common-micro-libs/src/jsutils/runtime-aliases"
+import {
+    objectKeys,
+    doc,
+    createTextNode,
+    createElement,
+    appendChild
+} from "common-micro-libs/src/jsutils/runtime-aliases"
 import {varsDefault} from "./vars-default";
 
 //=========================================================================
+export const VERSION = BUILD.DATA.VERSION; // eslint-disable-line
 const CSS_VAR_LIST = objectKeys(varsDefault);
 const VARS_DEFAULT_STYLESHEET = CSS_VAR_LIST.reduce((allVars, varName) => {
     allVars += `${varName}: ${varsDefault[varName]};` + "\n";
     return allVars;
 }, "");
-
-export const VERSION = BUILD.DATA.VERSION; // eslint-disable-line
+const toCssPropertiesString = varsObject => {
+    return Object
+        .entries(varsObject)
+        .reduce((str, [property, value]) => (str += `${property}: ${value};`), "");
+};
+const isRootHtmlElement = ele => ele.matches(":root");
 
 /**
  * An element that exposes several CSS variables that can be controlled and thus affect
@@ -47,7 +58,10 @@ export class CssVars extends ComponentElement {
 <style>
 :host {
     display: block;
-
+}
+</style>
+<style vars>
+:host {
     ${VARS_DEFAULT_STYLESHEET}
 }
 </style>
@@ -62,15 +76,14 @@ export class CssVars extends ComponentElement {
      * @type {Object}
      */
     @prop
-    get vars() {return {}; }
+    get vars() {
+        return varsDefault;
+    }
+
     set vars(newVars) {
         if ("object" !== typeof newVars) {
             console.warn("vars prop must be an object!"); // eslint-disable-line
             newVars = {};
-        }
-        if (this.vars && newVars !== this.vars) {
-            clearCustomVars(this, this.vars, false);
-            clearCustomVarsFromTargetElements(this);
         }
         return newVars;
     }
@@ -79,20 +92,28 @@ export class CssVars extends ComponentElement {
     /**
      * A DOM selector to where the css vars will also be set. This will be in addition to
      * setting the vars on this element itself.
+     * If defined as a string, then its assume to be a css selector.  Value can also be
+     * set as a DOM element or Style element. When a Style Element is used, the entire
+     * Style element's content will be manipulated, so it should be one that does not
+     * already contain defintions.
      *
      * @property
-     * @type {String}
+     * @type {String|HTMLElement|HTMLStyleElement}
      * @example
      *
      * <css-vars target":root"></css-vars>
      */
     @prop({attr: true})
-    get target() { return null; }
+    get target() {
+        return null;
+    }
 
 
     init() {
         this[STATE_SYMBOL] = {
             priorTarget: null,
+            /** @type Array<HTMLElement> */
+            $targets: null,
             $style: null
         };
 
@@ -103,44 +124,37 @@ export class CssVars extends ComponentElement {
 
         // When `target` changes, clean out existing <style> tag for defaults and apply new one
         this.onPropsChange(this._handleTargetChange, "target");
-
-        this.onDestroy(() => {
-            clearDefaultVarsForTargetElements(this);
-            clearCustomVarsFromTargetElements(this);
-        });
     }
 
     ready() {
+        this._varStyleEle = this.$("style[vars]");
         this._handleCustomVarsChange();
         this._handleTargetChange();
     }
 
+    unmounted() {
+        clearCustomVarsFromTargetElements(this);
+        stopPushingStylesToTargets(this);
+    }
 
     @bind
     _handleCustomVarsChange() {
+        clearCustomVars(this, this.vars, false);
         setCustomVars(this, this.props.vars);
+
+        clearCustomVarsFromTargetElements(this);
         setCustomVarsOnTargetElements(this);
     }
-
 
     @bind
     _handleTargetChange() {
         // Tear down and create new (if applicable) default styles for selector
         if (this[STATE_SYMBOL].priorTarget && this[STATE_SYMBOL].priorTarget !== this.props.target) {
-            clearDefaultVarsForTargetElements(this);
             clearCustomVarsFromTargetElements(this);
+            stopPushingStylesToTargets(this);
         }
 
         if (this.props.target) {
-            // If no defaults are yet created for this target, do it now
-            if (!this[STATE_SYMBOL].$style) {
-                this[STATE_SYMBOL].$style = createStyleElement(`
-${this.props.target} {
-    ${VARS_DEFAULT_STYLESHEET}
-}
-`);
-            }
-
             setCustomVarsOnTargetElements(this);
         }
     }
@@ -176,10 +190,35 @@ ${this.props.target} {
 
 function setCustomVars(ele, vars, emit = true) {
     const varsKeys = objectKeys(vars);
+
     if (varsKeys.length) {
-        varsKeys.forEach(varName => {
-            ele.style.setProperty(varName, vars[varName]);
-        });
+        // Is it a CssVars element? if so, then set on internal <style> elememt
+        if (ele._varStyleEle) {
+            ele._varStyleEle.innerHTML = "";
+            appendChild(
+                ele._varStyleEle,
+                createTextNode(`
+:host {
+${ toCssPropertiesString(vars) }
+}
+`
+                )
+            );
+
+            // Is it A STYLE tag?, then replace its content
+        } else if (ele.tagName === "STYLE") {
+            ele.innerHTML = "";
+            appendChild(ele, createTextNode(`
+:root {
+${ toCssPropertiesString(vars) } 
+}
+`));
+            // ELSE: set directly on the element
+        } else {
+            varsKeys.forEach(varName => {
+                ele.style.setProperty(varName, vars[varName]);
+            });
+        }
 
         if (emit && ele.emit) {
             /**
@@ -193,8 +232,16 @@ function setCustomVars(ele, vars, emit = true) {
 
 function clearCustomVars(ele, vars, emit = true) {
     const varsKeys = objectKeys(vars);
+
     if (varsKeys.length) {
-        varsKeys.forEach(cssPropName => ele.style.removeProperty(cssPropName));
+        varsKeys.forEach(cssPropName => {
+            if (ele.tagName === "STYLE") {
+                ele.innerHTML = "";
+            } else {
+                ele.style.removeProperty(cssPropName);
+            }
+        });
+
         if (emit && ele.emit) {
             ele.emit("change", null, {bubble: true});
         }
@@ -202,46 +249,70 @@ function clearCustomVars(ele, vars, emit = true) {
 }
 
 function setCustomVarsOnTargetElements(cssVarsInst) {
-    if (cssVarsInst.props.target) {
-        domFind(document, cssVarsInst.props.target).forEach(targetEle => {
-            setCustomVars(targetEle, cssVarsInst.props.vars, false);
+    const state = cssVarsInst[STATE_SYMBOL];
+    const {target, vars} = cssVarsInst.props;
+
+    if (target) {
+        if (!state.$targets) {
+            if ("string" === typeof target) {
+                state.$targets = domFind(doc, target);
+            } else {
+                state.$targets = [target];
+            }
+        }
+
+        state.$targets.forEach(targetEle => {
+            // :root is treated differently
+            if (isRootHtmlElement(targetEle)) {
+                // If no defaults are yet created for this target, do it now
+                if (!state.$style) {
+                    state.$style = createStyleElement("");
+                }
+                targetEle = state.$style;
+            }
+
+            setCustomVars(targetEle, vars, false);
         });
-        cssVarsInst[STATE_SYMBOL].priorTarget = cssVarsInst.props.target;
+
+        cssVarsInst[STATE_SYMBOL].priorTarget = target;
     }
 }
 
 function clearCustomVarsFromTargetElements(cssVarsInst) {
-    if (cssVarsInst[STATE_SYMBOL].priorTarget) {
-        domFind(document, cssVarsInst[STATE_SYMBOL].priorTarget).forEach(targetEle => {
+    const state = cssVarsInst[STATE_SYMBOL];
+
+    if (state.$targets) {
+        state.$targets.forEach(targetEle => {
+            if (isRootHtmlElement(targetEle)) {
+                targetEle = state.$style;
+            }
             clearCustomVars(targetEle, cssVarsInst.props.vars, false);
         });
-        cssVarsInst[STATE_SYMBOL].priorTarget = null;
     }
 }
 
-function clearDefaultVarsForTargetElements(cssVarsInst) {
-    if (cssVarsInst[STATE_SYMBOL].$style) {
-        cssVarsInst[STATE_SYMBOL].$style.parentNode.removeChild(cssVarsInst[STATE_SYMBOL].$style);
-        cssVarsInst[STATE_SYMBOL].$style = null;
+function stopPushingStylesToTargets(cssVarsInst) {
+    const state = cssVarsInst[STATE_SYMBOL];
+    if (state.$style) {
+        state.$style.parentNode.removeChild(state.$style);
+        state.$style = null;
+    }
+    if (state.$targets) {
+        state.$targets = null;
     }
 }
 
 function createStyleElement(stylesheetContent) {
-    const style = document.createElement("style");
-    const head = document.head;
+    const style = createElement("style");
+    const head = doc.head;
 
     style.type = "text/css";
-
-    if (style.styleSheet) {
-        style.styleSheet.cssText = stylesheetContent;
-    } else {
-        style.appendChild(document.createTextNode(stylesheetContent));
-    }
+    appendChild(style, createTextNode(stylesheetContent));
 
     if (head.hasChildNodes()) {
         head.insertBefore(style, head.firstChild)
     } else {
-        head.appendChild(style);
+        appendChild(head, style);
     }
 
     return style;

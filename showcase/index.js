@@ -5,6 +5,7 @@ import "./font-showcase"
 import "./borders-and-spacing-showcase"
 import "./theme-editor"
 import "./theme-selector"
+import "./prop-target"
 
 // import other showcases now so that they register themselves.
 

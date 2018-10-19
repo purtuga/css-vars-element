@@ -1,5 +1,5 @@
 export const menuGroupTitles = {
     vars: "CSS Vars",
-    events: "Events",
+    props: "Component Props",
     other: "Other Components"
 };
