@@ -1,5 +1,6 @@
 import {ComponentElement, prop, bind, STATE_SYMBOL} from "component-element"
 import {domFind} from "common-micro-libs/src/domutils/domFind"
+import {domMatches} from "common-micro-libs/src/domutils/domMatches"
 import {
     objectKeys,
     doc,
@@ -21,7 +22,7 @@ const toCssPropertiesString = varsObject => {
         .entries(varsObject)
         .reduce((str, [property, value]) => (str += `${property}: ${value};`), "");
 };
-const isRootHtmlElement = ele => ele.matches(":root");
+const isRootHtmlElement = ele => domMatches(ele, ":root");
 
 /**
  * An element that exposes several CSS variables that can be controlled and thus affect

@@ -26,8 +26,8 @@
         "dist": "webpack --config node_modules/project-base/configs/webpack.config.js --env.build=prod.minified --env.build=prod.legacy.minified --env.build=prod.esm.minified --env.build=prod.wc.minified --env.build=prod.wc.legacy.minified",
         "setup:dev": "node node_modules/project-base/scripts/create-dev",
         "test": "tape -r esm test/**/*.js",
-        "lint": "eslint src/**/*.js",
-        "lint:fix": "eslint src/**/*.js --fix"
+        "lint": "eslint -c ./node_modules/project-base/configs/eslint.config.js src/**/*.js",
+        "lint:fix": "eslint -c ./node_modules/project-base/configs/eslint.config.js --fix src/**/*.js"
     },
     "keywords": [
         "theme",
