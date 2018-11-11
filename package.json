@@ -44,6 +44,6 @@
     },
     "dependencies": {
         "common-micro-libs": "github:purtuga/common-micro-libs",
-        "component-element": "github:purtuga/ComponentElement"
+        "component-element": "github:purtuga/ComponentElement#release/v1.x"
     }
 }
