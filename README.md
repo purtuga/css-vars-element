@@ -12,7 +12,7 @@ Or, view the [vars-default.js](srs/vars-default.js) file.
 #   Usage
 
 ```javascript
-import {CssVars} from "css-vars-element.esm.min.js";
+import {CssVars} from "@purtuga/css-vars-element";
 
 CssVars.define();
 
@@ -40,7 +40,7 @@ Using the `import` bundle which will automatically register the element:
             <p>A test paragraph</p>
         </div>
     </css-vars>
-    <script src="path/to/css-vars-element.import.min.js"></script>
+    <script src="//unpkg.com/@purtuga/css-vars-element/dist/css-vars-element.import.min.js"></script>
 </body>
 ```
 
