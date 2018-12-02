@@ -1,5 +1,5 @@
 {
-    "name": "css-vars-element",
+    "name": "@purtuga/css-vars-element",
     "version": "1.0.0",
     "description": "Element that allows control of css variables available for theming",
     "main": "src/index.js",
