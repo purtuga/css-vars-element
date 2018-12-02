@@ -29,11 +29,9 @@ export class TabStrip extends ComponentElement {
     //-------------------------------------------------------------
 
     //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ STATIC PROPERTIES ~~~~~
-    static get tagName() {
-        return "tab-strip";
-    }
+    static tagName = "tab-strip";
 
-    static get template() {
+    render() {
         return `
 <style>
     :host {
@@ -90,16 +88,9 @@ export class TabStrip extends ComponentElement {
 `;
     }
 
-    // static get delayDestroy() {}
-    // static get useShadow() {}
-    // static get shadowMode() {}
-    // static getEventInitOptions(){}
-    // static get observedAttributes() {}
 
     //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ STATIC METHODS ~~~~~
 
-    // static renderTemplate(ele) {}
-    // static define(name) {}
 
 
     //-------------------------------------------------------------
@@ -112,20 +103,7 @@ export class TabStrip extends ComponentElement {
 
 
     //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~  LIFE CYCLE HOOKS  ~~~~~
-    // Called from constructor
-    // init() {}
 
-    // Called when all required `props` have been provided
-    // ready() {}
-
-    // Called if required fields are removed
-    // unready() {}
-
-    // called when element is attached to dom
-    // mounted() {}
-
-    // called when element is removed from dom
-    // unmounted() {}
 
 
     //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

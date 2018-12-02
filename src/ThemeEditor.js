@@ -50,11 +50,9 @@ export class ThemeEditor extends ComponentElement {
     //-------------------------------------------------------------
 
     //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ STATIC PROPERTIES ~~~~~
-    static get tagName() {
-        return "theme-editor";
-    }
+    static tagName = "theme-editor";
 
-    static get template() {
+    render() {
         return `
 <style>
     :host {
@@ -321,9 +319,6 @@ export class ThemeEditor extends ComponentElement {
 
     //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ STATIC METHODS ~~~~~
 
-    // static renderTemplate(ele) {}
-    // static define(name) {}
-
 
     //-------------------------------------------------------------
     //
@@ -337,7 +332,7 @@ export class ThemeEditor extends ComponentElement {
 
     //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~  LIFE CYCLE HOOKS  ~~~~~
     // Called from constructor
-    init() {
+    didInit() {
         this._state = {
             show: "general",
             $varsCntr: null,
@@ -350,7 +345,7 @@ export class ThemeEditor extends ComponentElement {
     }
 
     // Called when all required `props` have been provided
-    ready() {
+    didRender() {
         if (!this._setupDone) {
             this._setupDone = true;
             this._state.$downloadContent = this.$(".download-content");
@@ -627,16 +622,6 @@ export class ThemeEditor extends ComponentElement {
             this.hideDownload();
         }
     }
-
-    // Called if required fields are removed
-    // unready() {}
-
-    // called when element is attached to dom
-    // mounted() {}
-
-    // called when element is removed from dom
-    // unmounted() {}
-
 
     //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 

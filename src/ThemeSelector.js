@@ -26,11 +26,15 @@ export class ThemeSelector extends ComponentElement {
     //-------------------------------------------------------------
 
     //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ STATIC PROPERTIES ~~~~~
-    static get tagName() {
-        return "theme-selector";
+    static tagName = "theme-selector";
+
+    willRender() {
+        if (this._setupDone) {
+            return false;
+        }
     }
 
-    static get template() {
+    render() {
         return `
 <style>
     :host {
@@ -94,16 +98,8 @@ export class ThemeSelector extends ComponentElement {
 <div class="choices"></div>`;
     }
 
-    // static get delayDestroy() {}
-    // static get useShadow() {}
-    // static get shadowMode() {}
-    // static getEventInitOptions(){}
-    // static get observedAttributes() {}
-
     //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ STATIC METHODS ~~~~~
 
-    // static renderTemplate(ele) {}
-    // static define(name) {}
 
 
     //-------------------------------------------------------------
@@ -152,7 +148,7 @@ export class ThemeSelector extends ComponentElement {
     // init() {}
 
     // Called when all required `props` have been provided
-    ready() {
+    didRender() {
         if (!this._setupDone) {
             this._setupDone = true;
 
@@ -177,14 +173,8 @@ export class ThemeSelector extends ComponentElement {
         }
     }
 
-    // Called if required fields are removed
-    // unready() {}
-
-    // called when element is attached to dom
-    // mounted() {}
-
     // called when element is removed from dom
-    unmounted() {
+    didUnmount() {
         this._removeGlobalEventListeners();
     }
 
@@ -264,7 +254,7 @@ export class ThemeSelector extends ComponentElement {
     }
 
     _removeGlobalEventListeners() {
-        if (this._state.docEvListener) {
+        if (this._state && this._state.docEvListener) {
             this._state.docEvListener.remove();
             this._state.docEvListener = null;
         }

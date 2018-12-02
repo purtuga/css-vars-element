@@ -1,4 +1,4 @@
-import {showcase} from "project-showcase"
+import {showcase} from "@purtuga/project-showcase"
 import {menuGroupTitles} from "./common";
 
 // import other showcases now so that they register themselves.

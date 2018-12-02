@@ -32,18 +32,14 @@ const isRootHtmlElement = ele => domMatches(ele, ":root");
  * @fires CssVars#change
  */
 export class CssVars extends ComponentElement {
-    static get tagName() {
-        return "css-vars";
-    }
+    static tagName = "css-vars";
 
     /**
      * Returns an object with the default variables and associated values
      *
      * @returns {Object}
      */
-    static get defaultVars() {
-        return varsDefault;
-    }
+    static defaultVars = varsDefault;
 
     /**
      * Returns an array with all the css var names
@@ -54,7 +50,7 @@ export class CssVars extends ComponentElement {
         return CSS_VAR_LIST.slice(0);
     }
 
-    static get template() {
+    render() {
         return `
 <style>
 :host {
@@ -80,7 +76,6 @@ export class CssVars extends ComponentElement {
     get vars() {
         return varsDefault;
     }
-
     set vars(newVars) {
         if ("object" !== typeof newVars) {
             console.warn("vars prop must be an object!"); // eslint-disable-line
@@ -109,8 +104,7 @@ export class CssVars extends ComponentElement {
         return null;
     }
 
-
-    init() {
+    didInit() {
         this[STATE_SYMBOL] = {
             priorTarget: null,
             /** @type Array<HTMLElement> */
@@ -127,13 +121,13 @@ export class CssVars extends ComponentElement {
         this.onPropsChange(this._handleTargetChange, "target");
     }
 
-    ready() {
+    didRender() {
         this._varStyleEle = this.$("style[vars]");
         this._handleCustomVarsChange();
         this._handleTargetChange();
     }
 
-    unmounted() {
+    didUnmount() {
         clearCustomVarsFromTargetElements(this);
         stopPushingStylesToTargets(this);
     }

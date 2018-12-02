@@ -1,4 +1,4 @@
-import {showcase, registerElements} from "project-showcase"
+import {showcase, registerElements} from "@purtuga/project-showcase"
 import "./colors-showcase"
 import "./events-showcase"
 import "./font-showcase"
