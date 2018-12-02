@@ -39,11 +39,11 @@
     "license": "MIT",
     "repository": "git@github.com:purtuga/css-vars-element.git",
     "devDependencies": {
-        "project-base": "github:purtuga/project-base#beta/v2.0.0",
-        "project-showcase": "github:purtuga/project-showcase"
+        "@purtuga/project-base": "^2.1.1",
+        "@purtuga/project-showcase": "^2.0.0"
     },
     "dependencies": {
-        "common-micro-libs": "github:purtuga/common-micro-libs",
-        "component-element": "github:purtuga/ComponentElement#release/v1.x"
+        "@purtuga/common": "^3.5.0",
+        "@purtuga/component-element": "^2.1.0"
     }
 }

@@ -1,6 +1,6 @@
-import {ComponentElement, prop, bind} from "component-element"
-import {domAddEventListener} from "common-micro-libs/src/domutils/domAddEventListener"
-import {parseHTML} from "common-micro-libs/src/jsutils/parseHTML"
+import {ComponentElement, prop, bind} from "@purtuga/component-element"
+import {domAddEventListener} from "@purtuga/common/src/domutils/domAddEventListener"
+import {parseHTML} from "@purtuga/common/src/jsutils/parseHTML"
 
 //=============================================================
 const warn = console.warn; // eslint-disable-line

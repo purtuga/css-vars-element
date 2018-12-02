@@ -1,6 +1,6 @@
-import {ComponentElement} from "component-element"
-import {functionBindCall, consoleError} from "common-micro-libs/src/jsutils/runtime-aliases"
-import {xmlEscape} from "common-micro-libs/src/jsutils/xmlEscape"
+import {ComponentElement} from "@purtuga/component-element"
+import {functionBindCall, consoleError} from "@purtuga/common/src/jsutils/runtime-aliases"
+import {xmlEscape} from "@purtuga/common/src/jsutils/xmlEscape"
 import {TabStrip} from "../showcase/components/TabStrip";
 
 //=============================================================

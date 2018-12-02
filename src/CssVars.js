@@ -1,13 +1,13 @@
-import {ComponentElement, prop, bind, STATE_SYMBOL} from "component-element"
-import {domFind} from "common-micro-libs/src/domutils/domFind"
-import {domMatches} from "common-micro-libs/src/domutils/domMatches"
+import {ComponentElement, prop, bind, STATE_SYMBOL} from "@purtuga/component-element"
+import {domFind} from "@purtuga/common/src/domutils/domFind"
+import {domMatches} from "@purtuga/common/src/domutils/domMatches"
 import {
     objectKeys,
     doc,
     createTextNode,
     createElement,
     appendChild
-} from "common-micro-libs/src/jsutils/runtime-aliases"
+} from "@purtuga/common/src/jsutils/runtime-aliases"
 import {varsDefault} from "./vars-default";
 
 //=========================================================================
