@@ -64,7 +64,7 @@ export const varsDefault = Object.freeze({
 
     /* == BACKGROUND / FORGROUND == */
     "--theme-color-bg": "var(--theme-color-0)",
-    "--theme-color-fg": "var(--theme-color-9)",
+    "--theme-color-fg": "var(--theme-color-8)",
 
     /* == LINKS == */
     "--theme-color-link": "var(--theme-color-accent-info-3)",
@@ -90,15 +90,16 @@ export const varsDefault = Object.freeze({
     //                                                  FONTS
     //---------------------------------------------------------------
     "--theme-font-size-xxl": "28px",
-    "--theme-font-size-xl": "21px",
-    "--theme-font-size-l": "17px",
-    "--theme-font-size-m": "14px",
-    "--theme-font-size-s": "12px",
+    "--theme-font-size-xl": "22px",
+    "--theme-font-size-l": "18px",
+    "--theme-font-size-m": "16px",
+    "--theme-font-size-s": "14px",
     "--theme-font-size-xs": "11px",
+
+    "--theme-font-size": "var(--theme-font-size-m)",
 
     "--theme-font-family": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\"",
     "--theme-font-family-monospace": "SFMono-Regular, Menlo, Monaco, Consolas, \"Liberation Mono\", \"Courier New\", monospace",
-
 
 
     //---------------------------------------------------------------
@@ -106,10 +107,18 @@ export const varsDefault = Object.freeze({
     //---------------------------------------------------------------
     "--theme-border-style": "solid",
     "--theme-border-width": "1px",
+
     "--theme-border-color": "var(--theme-color-5)",
-    "--theme-border-radius": "3px",
+    "--theme-border-color-light": "var(--theme-color-4)",
+
+    "--theme-border-radius-sm": "3px",
+    "--theme-border-radius-md": "6px",
+    "--theme-border-radius-lg": "12px",
+    "--theme-border-radius-xl": "24px",
+    "--theme-border-radius": "var(--theme-border-radius-md)",
 
     "--theme-border": "var(--theme-border-width) var(--theme-border-style) var(--theme-border-color)",
+    "--theme-border-light": "var(--theme-border-width) var(--theme-border-style) var(--theme-border-color-light)",
 
 
     //---------------------------------------------------------------
@@ -124,14 +133,15 @@ export const varsDefault = Object.freeze({
     "--theme-spacing-6": "1.5rem",
     "--theme-spacing-7": "1.75rem",
     "--theme-spacing-8": "2rem",
+    "--theme-spacing": "var(--theme-spacing-2)", // default
 
 
     //---------------------------------------------------------------
     //                                              AFFECTS
     //---------------------------------------------------------------
-    "--theme-box-shadow": "0 8px 10px 1px rgba(0,0,0,0.14), 0 3px 14px 2px rgba(0,0,0,0.12), 0 5px 5px -3px rgba(0,0,0,0.2)",
     "--theme-box-shadow-n": "0 -8px 10px 1px rgba(0,0,0,0.14), 0 3px 14px 2px rgba(0,0,0,0.12), 0 5px 5px -3px rgba(0,0,0,0.2)",
     "--theme-box-shadow-e": "8px 0 10px 1px rgba(0,0,0,0.14), 0 3px 14px 2px rgba(0,0,0,0.12), 0 5px 5px -3px rgba(0,0,0,0.2)",
-    "--theme-box-shadow-s": "var(--theme-box-shadow)",
-    "--theme-box-shadow-w": "-8px 0 10px 1px rgba(0,0,0,0.14), 0 3px 14px 2px rgba(0,0,0,0.12), 0 5px 5px -3px rgba(0,0,0,0.2)"
+    "--theme-box-shadow-s": "0 8px 10px 1px rgba(0,0,0,0.14), 0 3px 14px 2px rgba(0,0,0,0.12), 0 5px 5px -3px rgba(0,0,0,0.2)",
+    "--theme-box-shadow-w": "-8px 0 10px 1px rgba(0,0,0,0.14), 0 3px 14px 2px rgba(0,0,0,0.12), 0 5px 5px -3px rgba(0,0,0,0.2)",
+    "--theme-box-shadow": "var(--theme-box-shadow)"
 });
