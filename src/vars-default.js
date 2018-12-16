@@ -133,6 +133,7 @@ export const varsDefault = Object.freeze({
     "--theme-spacing-6": "1.5rem",
     "--theme-spacing-7": "1.75rem",
     "--theme-spacing-8": "2rem",
+    "--theme-spacing-9": "2.25rem",
     "--theme-spacing": "var(--theme-spacing-2)", // default
 
 
