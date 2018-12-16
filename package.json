@@ -1,6 +1,6 @@
 {
     "name": "@purtuga/css-vars-element",
-    "version": "2.1.0",
+    "version": "2.2.0",
     "description": "Element that allows control of css variables available for theming",
     "main": "src/index.js",
     "module": "src/index.js",
